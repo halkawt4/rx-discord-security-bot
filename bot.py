@@ -118,6 +118,35 @@ async def report(ctx, user: discord.Member = None, *, args = None):
     await client.say(embed=msg)
 
 ''' COMMANDS FOR HELPERS '''
+# }cb
+@client.command(pass_context=True)
+async def cb(ctx):
+    author = ctx.message.author
+    chnl = ctx.message.channel
+    msg = discord.Embed(colour=0xC30000, description= "")
+    msg.title = ""
+    msg.set_footer(text=footer_text)
+    owner = discord.utils.get(ctx.message.server.roles, id=owner_role)
+    admin = discord.utils.get(ctx.message.server.roles, id=admin_role)
+    manager = discord.utils.get(ctx.message.server.roles, id=manager_role)
+    mod = discord.utils.get(ctx.message.server.roles, id=mod_role)
+    helper = discord.utils.get(ctx.message.server.roles, id=helper_role)
+    a = []
+    if helper in author.roles or mod in author.roles or admin in author.roles or manager in author.roles or owner in author.roles:
+        async for i in client.logs_from(chnl):
+            if len(a) < 50:
+                if i.author.bot:
+                    await client.delete_message(i)
+                    a.append("+1")
+                else:
+                    print("")
+            else:
+                break
+        msg.add_field(name=":robot: :gun: Bot Killer", value="<@{}> removed the latest messages sent by bots.".format(author.id))
+    else:
+        msg.add_field(name=error_img, value="This command can only be used by the staff!")
+    await client.say(embed=msg)
+    
 # }punish <user> <time> [reason]
 @client.command(pass_context=True)
 async def punish(ctx, user: discord.Member = None, time4 = None, *, args = None):
