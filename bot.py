@@ -302,6 +302,13 @@ async def warn(ctx, user: discord.Member = None, *, args = None):
                     msg.add_field(name=":warning: ", value="<@{}> warned <@{}>.\nReason:\n{}".format(author.id, user.id, args))
                     await client.say("<@{}>".format(user.id), embed=msg)
                 chnl = client.get_channel('453219479963303936')
+                chnl2 = client.get_channel('453218908187394058')
+                m2 = "**__~~= = = = = = = = = =~~__**"
+                m2 += "\n`Target:` <@{}>".format(user.id)
+                m2 += "\n`Warned by:` <@{}>".format(author.id)
+                m2 += "\n`Reason:`"
+                m2 += "\n{}".format(args)
+                await client.send_message(chnl2, m2)
                 m = "```diff"
                 m += "\n- WARN -"
                 m += "\n+ Author: {} ### {}".format(author, author.id)
@@ -313,6 +320,91 @@ async def warn(ctx, user: discord.Member = None, *, args = None):
     else:
         msg.add_field(name=error_img, value="This command can only be used by the staff.")
         await client.say(embed=msg)
+
+# }check <user>
+@client.command(pass_context=True)
+async def check(ctx, user: discord.Member = None):
+    author = ctx.message.author
+    x = discord.utils.get(ctx.message.server.roles, id=x_role)
+    owner = discord.utils.get(ctx.message.server.roles, id=owner_role)
+    admin = discord.utils.get(ctx.message.server.roles, id=admin_role)
+    manager = discord.utils.get(ctx.message.server.roles, id=manager_role)
+    mod = discord.utils.get(ctx.message.server.roles, id=mod_role)
+    helper = discord.utils.get(ctx.message.server.roles, id=helper_role)
+    punished = discord.utils.get(ctx.message.server.roles, id=punished_role)
+    msg = discord.Embed(colour=0xC30000, description= "")
+    msg.title = ""
+    msg.set_footer(text=footer_text)
+    if owner in author.roles or admin in author.roles or manager in author.roles or mod in author.roles or helper in author.roles:
+        if user == None:
+            msg.add_field(name=error_img, value="Please mention someone you want to run a check on.")
+            await client.say(embed=msg)
+        else:
+            msg2 = discord.Embed(colour=0xC30000, description= "")
+            msg2.title = ""
+            msg2.set_footer(text=footer_text)
+            chnl = client.get_channel('453218908187394058')
+            b = []
+            await client.send_typing(ctx.message.channel)
+            async for i in client.logs_from(chnl):
+                a = str(i.content)
+                if user.id in a:
+                    b.append("+1")
+                    msg2.add_field(name=":warning: Warning number {}".format(len(b)), value="{}".format(i.content))
+                else:
+                    print("")
+            try:
+                await client.send_message(author, embed=msg2)
+                msg.add_field(name=":mag: Warnings Check", value="<@{}>, please check your DMs!".format(author.id), inline=True)
+                await client.say(embed=msg)
+            except:
+                msg.add_field(name=error_img, value="I cannot send you DMs. Please try again once you let me slide in your DMs.")
+                await client.say(embed=msg)
+                    
+    else:
+        msg.add_field(name=error_img, value="This command can only be used by the staff.")
+        await client.say(embed=msg)
+
+# }clear <user>
+@client.command(pass_context=True)
+async def clear(ctx, user: discord.Member = None):
+    author = ctx.message.author
+    x = discord.utils.get(ctx.message.server.roles, id=x_role)
+    owner = discord.utils.get(ctx.message.server.roles, id=owner_role)
+    admin = discord.utils.get(ctx.message.server.roles, id=admin_role)
+    manager = discord.utils.get(ctx.message.server.roles, id=manager_role)
+    mod = discord.utils.get(ctx.message.server.roles, id=mod_role)
+    helper = discord.utils.get(ctx.message.server.roles, id=helper_role)
+    punished = discord.utils.get(ctx.message.server.roles, id=punished_role)
+    msg = discord.Embed(colour=0xC30000, description= "")
+    msg.title = ""
+    msg.set_footer(text=footer_text)
+    if owner in author.roles or admin in author.roles or manager in author.roles or mod in author.roles or helper in author.roles:
+        if user == None:
+            msg.add_field(name=error_img, value="Please mention someone you want to clear the warnings from.")
+        else:
+            chnl = client.get_channel('453218908187394058')
+            chnl2 = client.get_channel('453219479963303936')
+            b = []
+            await client.send_typing(ctx.message.channel)
+            async for i in client.logs_from(chnl):
+                a = str(i.content)
+                if user.id in a:
+                    await client.delete_message(i)
+                    b.append("+1")
+                else:
+                    print("")
+            msg.add_field(name=":scissors: ", value="<@{}> cleared `{}` warnings from <@{}>!".format(author.id, len(b), user.id))
+            m = "```diff"
+            m += "\n- CLEAR WARNINGS -"
+            m += "\n+ Author: {} ### {}".format(author, author.id)
+            m += "\n+ Target: {} ### {}".format(user, user.id)
+            m += "\n+ Cleared: {}".format(len(b))
+            m += "\n```"
+            await client.send_message(chnl2, m)
+    else:
+        msg.add_field(name=error_img, value="This command can only be used by the staff.")
+    await client.say(embed=msg)
 
 # }purge <number>
 @client.command(pass_context=True)
