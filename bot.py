@@ -86,6 +86,8 @@ async def ping(ctx, option = None):
     elif option == "s":
         msg.add_field(name=":satellite: ", value="My ping: `{}ms`.".format(round((t2-t1)*1000)))
         await client.say(embed=msg)
+    elif option == "c":
+        print("")
     elif option == "all":
         msg.add_field(name=":satellite: ", value="My ping: `{}ms`.".format(round((t2-t1)*1000)))
         await client.say(embed=msg)
