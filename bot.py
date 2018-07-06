@@ -804,7 +804,7 @@ async def idban(ctx, target = None, *, args = None):
     msg.set_footer(text=footer_text)
     if owner in author.roles or manager in author.roles:
         if target == None or args == None:
-            msg.add_field(name=error_img, value="Not all arguments were given.\nExample: `}idban @Zero Stealing chocolate.`.")
+            msg.add_field(name=error_img, value="Not all arguments were given.\nExample: `}idban 412201413335056386 Stealing chocolate.`.")
         else:
             try:
                 a = await client.get_user_info(target)
