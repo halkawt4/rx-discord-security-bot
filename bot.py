@@ -305,11 +305,10 @@ async def warn(ctx, user: discord.Member = None, *, args = None):
                     await client.say("<@{}>".format(user.id), embed=msg)
                 chnl = client.get_channel('453219479963303936')
                 chnl2 = client.get_channel('453218908187394058')
-                m2 = "**__~~= = = = = = = = = =~~__**"
-                m2 += "\n`Target:` <@{}>".format(user.id)
-                m2 += "\n`Warned by:` <@{}>".format(author.id)
-                m2 += "\n`Reason:`"
-                m2 += "\n{}".format(args)
+                p = []
+                async for i in client.logs_from(chnl2):
+                    p.append("+1")
+                m2 = "{} | {} ### {} | {} ### {} | {}".format(len(p) + 1, author, author.id, user, user.id, args)
                 await client.send_message(chnl2, m2)
                 m = "```diff"
                 m += "\n- WARN -"
@@ -346,15 +345,16 @@ async def check(ctx, user: discord.Member = None):
             msg2.title = ""
             msg2.set_footer(text=footer_text)
             chnl = client.get_channel('453218908187394058')
-            b = []
             await client.send_typing(ctx.message.channel)
+            m = ""
             async for i in client.logs_from(chnl):
                 a = str(i.content)
                 if user.id in a:
-                    b.append("+1")
-                    msg2.add_field(name=":warning: Warning number {}".format(len(b)), value="{}".format(i.content))
+                    b = i.content.split(' | ')
+                    m += "\n**__Warn number: {}__**\n`Warned by:` {}\n`Reason:` {}".format(b[0], b[1], b[3])
                 else:
                     print("")
+            msg2.add_field(name=":warning: ***__Warning list for {} ### {}__***".format(user, user.id), value=m)
             try:
                 await client.send_message(author, embed=msg2)
                 msg.add_field(name=":mag: Warnings Check", value="<@{}>, please check your DMs!".format(author.id), inline=True)
