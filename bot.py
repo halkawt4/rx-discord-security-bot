@@ -222,9 +222,12 @@ async def punish(ctx, user: discord.Member = None, time4 = None, *, args = None)
                                         m += "\n{}".format(args)
                                         await client.send_message(chnl, m)
                                         await asyncio.sleep(float(time2))
-                                        await client.remove_roles(user, punished)
-                                        msg2.add_field(name=":no_entry_sign: ", value="<@{}> has been automatically pardoned.".format(user.id))
-                                        await client.say(embed=msg2)
+                                        if punished in user.roles:
+                                            await client.remove_roles(user, punished)
+                                            msg2.add_field(name=":no_entry_sign: ", value="<@{}> has been automatically pardoned.".format(user.id))
+                                            await client.say(embed=msg2)
+                                        else:
+                                            print("")
                             except:
                                 msg.add_field(name=error_img, value="There has been an error while trying to punish that user.")
                                 await client.say(embed=msg)
