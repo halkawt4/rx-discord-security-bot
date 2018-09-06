@@ -210,10 +210,13 @@ async def punish(ctx, user: discord.Member = None, time4 = None, *, args = None)
                                     m += "\n```"
                                     await client.send_message(client.get_channel('453219479963303936'), m)
                                     await asyncio.sleep(float(time2))
-                                    if punished in user.roles:
-                                        await client.remove_roles(user, punished)
-                                        msg2.description = "<@{}> has been automatically pardoned.".format(user.id)
-                                        await client.say(embed=msg2)
+                                    try:
+                                        if punished in user.roles:
+                                            await client.remove_roles(user, punished)
+                                            msg2.description = "<@{}> has been automatically pardoned.".format(user.id)
+                                            await client.say(embed=msg2)
+                                    except:
+                                        print("")
                                 else:
                                     if len(str(args)) > 1000:
                                         msg.description = "{} The reason cannot be longer than 1000 characters.".format(error_e)
@@ -230,10 +233,13 @@ async def punish(ctx, user: discord.Member = None, time4 = None, *, args = None)
                                         m += "\n{}".format(args)
                                         await client.send_message(client.get_channel('453219479963303936'), m)
                                         await asyncio.sleep(float(time2))
-                                        if punished in user.roles:
-                                            await client.remove_roles(user, punished)
-                                            msg2.add_field(name=":no_entry_sign: ", value="<@{}> has been automatically pardoned.".format(user.id))
-                                            await client.say(embed=msg2)
+                                        try:
+                                            if punished in user.roles:
+                                                await client.remove_roles(user, punished)
+                                                msg2.add_field(name=":no_entry_sign: ", value="<@{}> has been automatically pardoned.".format(user.id))
+                                                await client.say(embed=msg2)
+                                        except:
+                                            print("")
                             except:
                                 msg.description = "{} There has been an error while trying to punish that user.".format(error_e)
                                 await client.say(embed=msg)
