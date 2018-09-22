@@ -9,9 +9,9 @@ import time
 ''''''
 
 Client = discord.Client()
-bot_prefix= "dev}"
+bot_prefix= "}"
 client = commands.Bot(command_prefix=bot_prefix)
-footer_text = "[Realm X] - [X Security]"
+footer_text = "[Realm X] - [X Moderation]"
 
 pm_role = '473812644021927946'
 helper_role = '453195469309476877'
