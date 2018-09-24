@@ -686,7 +686,7 @@ async def takerole(ctx, user: discord.Member = None, *, args = None):
                 await client.say(embed=embed)
             else:
                 try:
-                    await client.add_roles(user, role)
+                    await client.remove_roles(user, role)
                     embed.description = "<@{}> removed `{}` from <@{}>'s roles.".format(author.id, args, user.id)
                     await client.say(embed=embed)
                     m = "```diff"
