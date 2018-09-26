@@ -464,7 +464,7 @@ async def nick(ctx, user: discord.Member = None, *, args = None):
                 else:
                     embed.description = "<@{}> changed **{}**'s nickname to `{}`.".format(author.id, user.name, args)
                     m = "```diff"
-                    m += "\n- PURGE -"
+                    m += "\n- NICK -"
                     m += "\n+ Author: {} ### {}".format(author, author.id)
                     m += "\n+ Target: {} ### {}".format(user, user.id)
                     m += "\n+ Nickname: {}".format(args)
