@@ -38,6 +38,7 @@ error_e = ":octagonal_sign:"
 logs = '490437065930965003'
 loading_e = '<a:loading:484705261609811979>'
 punished_list = []
+joined = []
 
 ''''''
 
@@ -59,12 +60,56 @@ async def on_ready():
 # EVENT - JOIN / LEAVE
 @client.async_event
 async def on_member_join(userName: discord.User):
+    joined.append(userName.id)
     if userName.id in punished_list:
         try:
             await client.add_roles(server.get_member(userName.id), discord.utils.get(server.roles, id=muted_role))
             await client.send_message(userName, m2)
         except:
             print("")
+    a = []
+    for i in joined:
+        if i == userName.id:
+            a.append("+1")
+    embed = discord.Embed(colour=0x7F1100)
+    embed.set_footer(text=footer_text)
+    if len(a) >= 5:
+        await client.http.ban(userName.id, userName.server.id, 0)
+        embed.description = "**{}** has been automatically banned.\nReason: Possible raid attempt.".format(userName)
+        await client.send_message(client.get_channel('453192466716164137'), embed=embed)
+        m = "```diff"
+        m += "\n- AUTO BAN -"
+        m += "\n+ Target: {} ### {}".format(userName, userName.id)
+        m += "\n+ Reason:"
+        m += "\nPossible raid attempt."
+        m += "\n```"
+        await client.send_message(client.get_channel(logs), m)
+        async for i in client.logs_from(client.get_channel('453192466716164137'), limit=10):
+            if userName.name in str(i.content) or i.author.id == userName.id or userName.id in str(i.content):
+                await client.delete_message(i)
+        async for i in client.logs_from(client.get_channel('453192385795588096'), limit=10):
+            if userName.name in str(i.content):
+                await client.delete_message(i)
+    if 'gg/' in str(userName.name):
+        try:
+            await client.kick(userName)
+            embed.description = "User with ID **{}** has been automatically kicked.\nReason: Advertising by name.".format(userName.id)
+            await client.send_message(client.get_channel('453192466716164137'), embed=embed)
+            m = "```diff"
+            m += "\n- AUTO KICK -"
+            m += "\n+ Target: {} ### {}".format(userName, userName.id)
+            m += "\n+ Reason:"
+            m += "\nAdvertising by name."
+            m += "\n```"
+            await client.send_message(client.get_channel(logs), m)
+        except:
+            print("")
+        async for i in client.logs_from(client.get_channel('453192466716164137'), limit=10):
+            if userName.name in str(i.content) or i.author.id == userName.id or userName.id in str(i.content):
+                await client.delete_message(i)
+        async for i in client.logs_from(client.get_channel('453192385795588096'), limit=10):
+            if userName.name in str(i.content):
+                await client.delete_message(i)
 
 
 ''' COMMANDS FOR EVERYONE '''
