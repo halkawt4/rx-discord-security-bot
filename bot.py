@@ -414,7 +414,8 @@ async def purge(ctx, number = None):
                     m = "```diff"
                     m += "\n- PURGE -"
                     m += "\n+ Author: {} ### {}".format(author, author.id)
-                    m += "\n+ Number: {}".format(number)
+                    m += "\n+ Channel: {} ### {}".format(ctx.message.channel.name, ctx.message.channel.id)
+                    m += "\n+ Number: {}/{}".format(len(deleted), number)
                     m += "\n```"
                     await client.send_message(client.get_channel(logs), m)
                 except:
@@ -428,7 +429,8 @@ async def purge(ctx, number = None):
                     m = "```diff"
                     m += "\n- PURGE -"
                     m += "\n+ Author: {} ### {}".format(author, author.id)
-                    m += "\n+ Number: {}".format(number)
+                    m += "\n+ Channel: {} ### {}".format(ctx.message.channel.name, ctx.message.channel.id)
+                    m += "\n+ Number: {}/{}".format(len(deleted), number)
                     m += "\n```"
                     await client.send_message(client.get_channel(logs), m)
             except:
