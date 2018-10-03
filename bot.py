@@ -61,6 +61,7 @@ async def on_ready():
 @client.async_event
 async def on_member_join(userName: discord.User):
     joined.append(userName.id)
+    server = userName.server
     if userName.id in punished_list:
         try:
             await client.add_roles(server.get_member(userName.id), discord.utils.get(server.roles, id=muted_role))
