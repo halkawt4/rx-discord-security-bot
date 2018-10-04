@@ -242,6 +242,10 @@ async def punish(ctx, user: discord.Member = None, time = None, *, args = None):
                     await client.send_message(client.get_channel(logs), m)
                     await asyncio.sleep(float(minutes))
                     try:
+                        try:
+                            punished_list.remove(user.id)
+                        except:
+                            print("")
                         if punished in user.roles:
                             await client.remove_roles(user, punished)
                             embed.description = "<@{}> was automatically pardoned.".format(user.id)
