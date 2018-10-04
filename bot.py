@@ -276,6 +276,10 @@ async def pardon(ctx, user: discord.Member = None):
             embed.description = "{} Please mention the user you want to pardon.".format(error_e)
             await client.say(embed=embed)
         elif punished in user.roles:
+            try:
+                punished_list.remove(user.id)
+            except:
+                print("")
             await client.remove_roles(user, punished)
             embed.description = "<@{}> pardoned <@{}>.".format(author.id, user.id)
             await client.say(embed=embed)
