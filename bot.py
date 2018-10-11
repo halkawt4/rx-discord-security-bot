@@ -736,25 +736,29 @@ async def takerole(ctx, user: discord.Member = None, *, args = None):
             embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [role name]`.".format(error_e)
             await client.say(embed=embed)
         else:
-            role = discord.utils.get(ctx.message.server.roles, name='{}'.format(args))
-            if author.top_role <= role:
-                embed.description = "{} You cannot remove a role that is the same or higher than your top role.".format(error_e)
+            try:
+                role = discord.utils.get(ctx.message.server.roles, name='{}'.format(args))
+                if author.top_role <= role:
+                    embed.description = "{} You cannot remove a role that is the same or higher than your top role.".format(error_e)
+                    await client.say(embed=embed)
+                else:
+                    try:
+                        await client.remove_roles(user, role)
+                        embed.description = "<@{}> removed `{}` from <@{}>'s roles.".format(author.id, args, user.id)
+                        await client.say(embed=embed)
+                        m = "```diff"
+                        m += "\n- TAKE ROLE -"
+                        m += "\n+ Author: {} ### {}".format(author, author.id)
+                        m += "\n+ Target: {} ### {}".format(user, user.id)
+                        m += "\n+ Role: {}".format(args)
+                        m += "\n```"
+                        await client.send_message(client.get_channel(logs), m)
+                    except:
+                        embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
+                        await client.say(embed=embed)
+            except:
+                embed.description = "{} A role with that name was not found.".format(error_e)
                 await client.say(embed=embed)
-            else:
-                try:
-                    await client.remove_roles(user, role)
-                    embed.description = "<@{}> removed `{}` from <@{}>'s roles.".format(author.id, args, user.id)
-                    await client.say(embed=embed)
-                    m = "```diff"
-                    m += "\n- TAKE ROLE -"
-                    m += "\n+ Author: {} ### {}".format(author, author.id)
-                    m += "\n+ Target: {} ### {}".format(user, user.id)
-                    m += "\n+ Role: {}".format(args)
-                    m += "\n```"
-                    await client.send_message(client.get_channel(logs), m)
-                except:
-                    embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
-                    await client.say(embed=embed)
     else:
         embed.description = "{} This command can only be used by Administrators, Managers and Owners.".format(error_e)
         await client.say(embed=embed)
@@ -773,25 +777,29 @@ async def giverole(ctx, user: discord.Member = None, *, args = None):
             embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [role name]`.".format(error_e)
             await client.say(embed=embed)
         else:
-            role = discord.utils.get(ctx.message.server.roles, name='{}'.format(args))
-            if author.top_role <= role:
-                embed.description = "{} You cannot give a role that is the same or higher than your top role.".format(error_e)
+            try:
+                role = discord.utils.get(ctx.message.server.roles, name='{}'.format(args))
+                if author.top_role <= role:
+                    embed.description = "{} You cannot give a role that is the same or higher than your top role.".format(error_e)
+                    await client.say(embed=embed)
+                else:
+                    try:
+                        await client.add_roles(user, role)
+                        embed.description = "<@{}> added `{}` to <@{}>'s roles.".format(author.id, args, user.id)
+                        await client.say(embed=embed)
+                        m = "```diff"
+                        m += "\n- GIVE ROLE -"
+                        m += "\n+ Author: {} ### {}".format(author, author.id)
+                        m += "\n+ Target: {} ### {}".format(user, user.id)
+                        m += "\n+ Role: {}".format(args)
+                        m += "\n```"
+                        await client.send_message(client.get_channel(logs), m)
+                    except:
+                        embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
+                        await client.say(embed=embed)
+            except:
+                embed.description = "{} A role with that name was not found.".format(error_e)
                 await client.say(embed=embed)
-            else:
-                try:
-                    await client.add_roles(user, role)
-                    embed.description = "<@{}> added `{}` to <@{}>'s roles.".format(author.id, args, user.id)
-                    await client.say(embed=embed)
-                    m = "```diff"
-                    m += "\n- GIVE ROLE -"
-                    m += "\n+ Author: {} ### {}".format(author, author.id)
-                    m += "\n+ Target: {} ### {}".format(user, user.id)
-                    m += "\n+ Role: {}".format(args)
-                    m += "\n```"
-                    await client.send_message(client.get_channel(logs), m)
-                except:
-                    embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
-                    await client.say(embed=embed)
     else:
         embed.description = "{} This command can only be used by Administrators, Managers and Owners.".format(error_e)
         await client.say(embed=embed)
