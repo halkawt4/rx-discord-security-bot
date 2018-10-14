@@ -45,6 +45,15 @@ joined = []
 # EVENT - TELLS YOU WHEN THE BOT TURNS ON
 @client.event
 async def on_ready():
+    server = client.get_server('452865346081128448')
+    punished = discord.utils.get(server.roles, id=muted_role)
+    try:
+        for i in server.members:
+            if punished in i.roles:
+                await client.remove_roles(i, punished)
+                print("[START UP] Pardoned {}".format(i.id))
+    except:
+        print("[START UP] Error in pardoning everyone.")
     print("[+][+][+][+][+][+][+][+][+][+][+][+]")
     print("[+] Logged in!")
     print("[+][+][+][+][+][+][+][+][+][+][+][+]")
@@ -431,14 +440,14 @@ async def clear(ctx, user: discord.Member = None, target = None):
                 embed.description = "{} A warning with that number hasn't been found.".format(error_e)
             else:
                 embed.description = "<@{}> cleared `1` warning for <@{}>.".format(author.id, user.id)
-        await client.edit_message(h, embed=embed)
-        m = "```diff"
-        m += "\n- CLEAR WARNINGS -"
-        m += "\n+ Author: {} ### {}".format(author, author.id)
-        m += "\n+ Target: {} ### {}".format(user, user.id)
-        m += "\n+ Number: {}".format(len(o))
-        m += "\n```"
-        await client.send_message(client.get_channel(logs), m)
+            await client.edit_message(h, embed=embed)
+            m = "```diff"
+            m += "\n- CLEAR WARNINGS -"
+            m += "\n+ Author: {} ### {}".format(author, author.id)
+            m += "\n+ Target: {} ### {}".format(user, user.id)
+            m += "\n+ Number: {}".format(len(o))
+            m += "\n```"
+            await client.send_message(client.get_channel(logs), m)
     else:
         embed.description = "{} This command can only be used by staff.".format(error_e)
         await client.say(embed=embed)
