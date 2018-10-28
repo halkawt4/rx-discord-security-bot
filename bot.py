@@ -9,7 +9,7 @@ import time
 ''''''
 
 Client = discord.Client()
-bot_prefix= "}"
+bot_prefix = ["xm!", "}"]
 client = commands.Bot(command_prefix=bot_prefix)
 footer_text = "[Realm X] - [X Moderation]"
 limit = 1000000000000
