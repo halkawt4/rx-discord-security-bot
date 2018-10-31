@@ -17,6 +17,28 @@ limit = 1000000000000
 warns_chnl = '506089510292029450'
 warns = []
 
+error_e = "<:error:507167378765774858>"
+log_e = "<:log:507167379520880640>"
+auto_e = "<:auto:507167379344588800>"
+pinggood_e = "<:pinggood:507167379533332500>"
+pingok_e = "<:pingok:507167378891735041>"
+pingbad_e = "<:pingbad:507167378975490076>"
+clearbots_e = "<:clearbots:507167378853855233>"
+muted_e = "<:muted:507167379227279370>"
+unmuted_e = "<:unmuted:507167379349045248>"
+warn_e = "<:warn:507167379370016768>"
+checking_e = "<:checking:507167378728026136>"
+clear_e = "<:clear:507167379072221204>"
+purge_e = "<:purge:507167379533332480>"
+nick_e = "<:nick:507167378925420546>"
+ban_e = "<:ban:507167378417909761>"
+unban_e = "<:unban:507167379520749588>"
+tempban_e = "<:tempban:507167379365822464>"
+kick_e = "<:kick:507167379101450240>"
+takerole_e = "<:takerole:507167379201982465>"
+giverole_e = "<:giverole:507167378866700315>"
+idban_e = "<:idban:507167379109838868>"
+
 pm_role = '473812644021927946'
 helper_role = '453195469309476877'
 mod_role = '453195518785486858'
@@ -38,7 +60,6 @@ legend_role = '453195358575656986'
 partner_role = '453194705732239360'
 muted_role = '453195421611982848'
 x_role = '453196094332076045'
-error_e = ":octagonal_sign:"
 logs = '490437065930965003'
 loading_e = '<a:loading:484705261609811979>'
 splitter = "**`====================`**"
@@ -94,10 +115,10 @@ async def on_member_join(userName: discord.User):
     embed.set_footer(text=footer_text)
     if len(a) >= 5:
         await client.http.ban(userName.id, userName.server.id, 0)
-        embed.description = "<:auto:506092657932500993> **{}** has been automatically banned.\nReason: Possible raid attempt.".format(userName)
+        embed.description = "{} **{}** has been automatically banned.\nReason: Possible raid attempt.".format(auto_e, userName)
         await client.send_message(client.get_channel('453192466716164137'), embed=embed)
         m = "{}".format(splitter)
-        m += "\n<:log:506091764415725579> **__Auto Ban__** <:auto:506092657932500993>"
+        m += "\n{} **__Auto Ban__** {}".format(log_e, auto_e)
         m += "\n`Target:` {} ### {}".format(userName, userName.id)
         m += "\n`Reason:`"
         m += "\nPossible raid attempt."
@@ -111,10 +132,10 @@ async def on_member_join(userName: discord.User):
     if 'gg/' in str(userName.name):
         try:
             await client.kick(userName)
-            embed.description = "<:auto:506092657932500993> User with ID **{}** has been automatically kicked.\nReason: Advertising by name.".format(userName.id)
+            embed.description = "{} User with ID **{}** has been automatically kicked.\nReason: Advertising by name.".format(auto_e, userName.id)
             await client.send_message(client.get_channel('453192466716164137'), embed=embed)
             m = "{}".format(splitter)
-            m += "\n<:log:506091764415725579> **__Auto Kick__** <:auto:506092657932500993>"
+            m += "\n{} **__Auto Kick__** {}".format(log_e, auto_e)
             m += "\n`Target:` {} ### {}".format(userName, userName.id)
             m += "\n`Reason:`"
             m += "\nAdvertising by name."
@@ -142,11 +163,11 @@ async def ping(ctx, option = None):
     t2 = time.perf_counter()
     ping = round((t2-t1)*1000)
     if ping > 300:
-        m = "<:pingbad:506094169379569666> The bot is lagging."
+        m = "{} The bot is lagging.".format(pingbad_e)
     elif ping > 200:
-        m = "<:pingok:506094170050658307> The bot might be lagging."
+        m = "{} The bot might be lagging.".format(pingok_e)
     else:
-        m = "<:pinggood:506094169840812032> The bot isn't lagging."
+        m = "{} The bot isn't lagging.".format(pinggood_e)
     if '}' in str(ctx.message.content):
         if option == "all" or option == "m":
             embed.description = "My ping is `{}`ms.\n{}".format(ping, m)
@@ -169,7 +190,7 @@ async def cb(ctx):
     mod = discord.utils.get(ctx.message.server.roles, id=mod_role)
     helper = discord.utils.get(ctx.message.server.roles, id=helper_role)
     if helper in author.roles or mod in author.roles or admin in author.roles or manager in author.roles or owner in author.roles:
-        embed.description = "<:clearbots:506096652231114753> Deleting latest messages sent by bots... {}".format(loading_e)
+        embed.description = "{} Deleting latest messages sent by bots... {}".format(clearbots_e, loading_e)
         h = await client.say(embed=embed)
         a = []
         msgs = []
@@ -182,12 +203,12 @@ async def cb(ctx):
                 break
         try:
             await client.delete_messages(msgs)
-            embed.description = "<:clearbots:506096652231114753> <@{}> removed the latest messages sent by bots.".format(author.id)
+            embed.description = "{} <@{}> removed the latest messages sent by bots.".format(clearbots_e, author.id)
             await client.edit_message(h, embed=embed)
         except:
             for i in msgs:
                 await client.delete_message(i)
-            embed.description = "<:clearbots:506096652231114753> <@{}> removed the latest messages sent by bots.".format(author.id)
+            embed.description = "{} <@{}> removed the latest messages sent by bots.".format(clearbots_e, author.id)
             await client.edit_message(h, embed=embed)
     else:
         embed.description = "{} This command can only be used by staff.".format(error_e)
@@ -232,10 +253,10 @@ async def punish(ctx, user: discord.Member = None, time = None, *, args = None):
                         reason = "?"
                     else:
                         reason = args
-                    embed.description = "<:muted:506097765156126724> <@{}> punished <@{}> for `{}` minute(s).\nReason: {}".format(author.id, user.id, time, reason)
+                    embed.description = "{} <@{}> punished <@{}> for `{}` minute(s).\nReason: {}".format(muted_e, author.id, user.id, time, reason)
                     await client.say(embed=embed)
                     m = "{}".format(splitter)
-                    m += "\n<:log:506091764415725579> **__Punish__** <:muted:506097765156126724>"
+                    m += "\n{} **__Punish__** {}".format(log_e, muted_e)
                     m += "\n`Author:` {} ### {}".format(author, author.id)
                     m += "\n`Target:` {} ### {}".format(user, user.id)
                     m += "\n`Time:` {} minute(s)".format(time)
@@ -250,7 +271,7 @@ async def punish(ctx, user: discord.Member = None, time = None, *, args = None):
                             print("")
                         if punished in user.roles:
                             await client.remove_roles(user, punished)
-                            embed.description = "<:unmuted:506098845088743441> <@{}> was automatically pardoned.".format(user.id)
+                            embed.description = "{} <@{}> was automatically pardoned.".format(unmuted_e, user.id)
                             await client.say(embed=embed)
                     except:
                         print("")
@@ -283,10 +304,10 @@ async def pardon(ctx, user: discord.Member = None):
             except:
                 print("")
             await client.remove_roles(user, punished)
-            embed.description = "<:unmuted:506098845088743441> <@{}> pardoned <@{}>.".format(author.id, user.id)
+            embed.description = "{} <@{}> pardoned <@{}>.".format(unmuted_e, author.id, user.id)
             await client.say(embed=embed)
             m = "{}".format(splitter)
-            m += "\n<:log:506091764415725579> **__Pardon__** <:unmuted:506098845088743441>"
+            m += "\n{} **__Pardon__** {}".format(log_e, unmuted_e)
             m += "\n`Author:` {} ### {}".format(author, author.id)
             m += "\n`Target:` {} ### {}".format(user, user.id)
             await client.send_message(client.get_channel(logs), m)
@@ -325,27 +346,27 @@ async def warn(ctx, user: discord.Member = None, *, args = None):
                     a.append("+1")
             if len(a) >= 5:
                 await client.ban(user)
-                embed.description = "<:auto:506092657932500993> **{}** has been automatically banned.\nReason: Reached max warnings.".format(user)
+                embed.description = "{} **{}** has been automatically banned.\nReason: Reached max warnings.".format(auto_e, user)
                 await client.say(embed=embed)
                 m = "{}".format(splitter)
-                m += "\n<:log:506091764415725579> **__Auto Ban__** <:auto:506092657932500993>"
+                m += "\n{} **__Auto Ban__** {}".format(log_e, auto_e)
                 m += "\n`Target:` {} ### {}".format(user, user.id)
                 m += "\n`Reason:`"
                 m += "\nReached max warnings."
                 await client.send_message(client.get_channel(logs), m)
             else:
                 try:
-                    embed.description = "<:warn:506101565841735680> You have been warned in **Realm ✘**.\nReason: {}".format(args)
+                    embed.description = "{} You have been warned in **Realm ✘**.\nReason: {}".format(warn_e, args)
                     await client.send_message(user, embed=embed)
-                    embed.description = "<:warn:506101565841735680> <@{}> warned <@{}>.\nReason: {}".format(author.id, user.id, args)
+                    embed.description = "{} <@{}> warned <@{}>.\nReason: {}".format(warn_e, author.id, user.id, args)
                     await client.say(embed=embed)
                 except:
-                    embed.description = "<:warn:506101565841735680> <@{}> warned <@{}>.\nReason: {}".format(author.id, user.id, args)
+                    embed.description = "{} <@{}> warned <@{}>.\nReason: {}".format(warn_e, author.id, user.id, args)
                     await client.say("<@{}>".format(user.id), embed=embed)
                 warns.append(user.id)
                 await client.send_message(client.get_channel(warns_chnl), "{} | {} ### {} | {}".format(user.id, author, author.id, args))
                 m = "{}".format(splitter)
-                m += "\n<:log:506091764415725579> **__Warning__** <:warn:506101565841735680>"
+                m += "\n{} **__Warning__** {}".format(log_e, warn_e)
                 m += "\n`Author:` {} ### {}".format(author, author.id)
                 m += "\n`Target:` {} ### {}".format(user, user.id)
                 m += "\n`Reason:`"
@@ -371,24 +392,24 @@ async def check(ctx, user: discord.Member = None):
             embed.description = "{} Please mention the user you want to check.".format(error_e)
             await client.say(embed=embed)
         else:
-            embed.description = "<:checking:506104792070881311> Checking warnings... {}".format(loading_e)
+            embed.description = "{} Checking warnings... {}".format(checking_e, loading_e)
             h = await client.say(embed=embed)
             p = []
             embed2 = discord.Embed(colour=0x7F1100)
             embed2.set_footer(text=footer_text)
-            embed2.description = "<:checking:506104792070881311> Warning data for **{}** ( `{}` ):".format(user, user.id)
+            embed2.description = "{} Warning data for **{}** ( `{}` ):".format(checking_e, user, user.id)
             async for i in client.logs_from(client.get_channel(warns_chnl), limit=10000000):
                 a = i.content.split(' | ')
                 p.append("+1")
                 if a[0] == user.id:
-                    embed2.add_field(name="<:warn:506101565841735680> **__Warning Number:__** `{}`".format(i.id), value="`Warned by:` {}\n`Reason:` {}".format(a[1], a[2]))
+                    embed2.add_field(name="{} **__Warning Number:__** `{}`".format(warn_e, i.id), value="`Warned by:` {}\n`Reason:` {}".format(a[1], a[2]))
             if len(p) == 0:
-                embed.description = "<:checking:506104792070881311> No warnings found for <@{}>.".format(user.id)
+                embed.description = "{} No warnings found for <@{}>.".format(checking_e, user.id)
                 await client.edit_message(h, embed=embed)
             else:
                 try:
                     await client.send_message(author, embed=embed2)
-                    embed.description = "<:checking:506104792070881311> The warning data for <@{}> has been sent to <@{}>'s DMs.".format(user.id, author.id)
+                    embed.description = "{} The warning data for <@{}> has been sent to <@{}>'s DMs.".format(checking_e, user.id, author.id)
                     await client.edit_message(h, embed=embed)
                 except:
                     embed.description = "{} Please give me permissions to DM you and try again.".format(error_e)
@@ -413,7 +434,7 @@ async def clear(ctx, user: discord.Member = None, target = None):
             embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <warn number/all>`.".format(error_e)
             await client.say(embed=embed)
         elif target == "all":
-            embed.description = "<:clear:506108172562333696> Checking warnings... {}".format(loading_e)
+            embed.description = "{} Checking warnings... {}".format(clear_e, loading_e)
             h = await client.say(embed=embed)
             o = []
             async for i in client.logs_from(client.get_channel(warns_chnl), limit=10000000):
@@ -422,18 +443,18 @@ async def clear(ctx, user: discord.Member = None, target = None):
                     await client.delete_message(i)
                     o.append("+1")
             if len(o) == 0:
-                embed.description = "<:clear:506108172562333696> No warnings found for <@{}>.".format(user.id)
+                embed.description = "{} No warnings found for <@{}>.".format(clear_e, user.id)
             else:
                 embed.description = "<@{}> cleared `{}` warning(s) for <@{}>.".format(author.id, len(o), user.id)
                 m = "{}".format(splitter)
-                m += "\n<:log:506091764415725579> **__Clear Warnings__** <:clear:506108172562333696>"
+                m += "\n{} **__Clear Warnings__** {}".format(log_e, clear_e)
                 m += "\n`Author:` {} ### {}".format(author, author.id)
                 m += "\n`Target:` {} ### {}".format(user, user.id)
                 m += "\n`Number:` {} (all)".format(len(o))
                 await client.send_message(client.get_channel(logs), m)
             await client.edit_message(h, embed=embed)
         else:
-            embed.description = "<:clear:506108172562333696> Checking warnings... {}".format(loading_e)
+            embed.description = "{} Checking warnings... {}".format(clear_e, loading_e)
             h = await client.say(embed=embed)
             o = []
             async for i in client.logs_from(client.get_channel(warns_chnl), limit=10000000):
@@ -445,9 +466,9 @@ async def clear(ctx, user: discord.Member = None, target = None):
             if len(o) == 0:
                 embed.description = "{} A warning with that number hasn't been found.".format(error_e)
             else:
-                embed.description = "<:clear:506108172562333696> <@{}> cleared `1` warning for <@{}>.".format(author.id, user.id)
+                embed.description = "{} <@{}> cleared `1` warning for <@{}>.".format(clear_e, author.id, user.id)
                 m = "{}".format(splitter)
-                m += "\n<:log:506091764415725579> **__Clear Warnings__** <:clear:506108172562333696>"
+                m += "\n{} **__Clear Warnings__** {}".format(log_e, clear_e)
                 m += "\n`Author:` {} ### {}".format(author, author.id)
                 m += "\n`Target:` {} ### {}".format(user, user.id)
                 m += "\n`Number:` {}".format(len(o))
@@ -477,10 +498,10 @@ async def purge(ctx, number = None):
                 amount = int(number)
                 try:
                     deleted = await client.purge_from(ctx.message.channel, limit=amount)
-                    embed.description = "<:purge:506113200094314520> <@{}> deleted `{}` messages.".format(author.id, len(deleted))
+                    embed.description = "{} <@{}> deleted `{}` messages.".format(purge_e, author.id, len(deleted))
                     await client.say(embed=embed)
                     m = "{}".format(splitter)
-                    m += "\n<:log:506091764415725579> **__Purge__** <:purge:506113200094314520>"
+                    m += "\n{} **__Purge__** {}".format(log_e, purge_e)
                     m += "\n`Author:` {} ### {}".format(author, author.id)
                     m += "\n`Channel:` {} ### {}".format(ctx.message.channel.name, ctx.message.channel.id)
                     m += "\n`Number:` {}/{}".format(len(deleted), number)
@@ -491,10 +512,10 @@ async def purge(ctx, number = None):
                         await client.delete_message(i)
                         deleted.append("+1")
                         await asyncio.sleep(float(1.5))
-                    embed.description = "<:purge:506113200094314520> <@{}> deleted `{}` messages.".format(author.id, len(deleted))
+                    embed.description = "{} <@{}> deleted `{}` messages.".format(purge_e, author.id, len(deleted))
                     await client.say(embed=embed)
                     m = "{}".format(splitter)
-                    m += "\n<:log:506091764415725579> **__Purge__** <:purge:506113200094314520>"
+                    m += "\n{} **__Purge__** {}".format(log_e, purge_e)
                     m += "\n`Author:` {} ### {}".format(author, author.id)
                     m += "\n`Channel:` {} ### {}".format(ctx.message.channel.name, ctx.message.channel.id)
                     m += "\n`Number:` {}/{}".format(len(deleted), number)
@@ -528,11 +549,11 @@ async def nick(ctx, user: discord.Member = None, *, args = None):
             try:
                 await client.change_nickname(user, args)
                 if args == None:
-                    embed.description = "<:nick:506115462170542120> <@{}> removed <@{}>'s nickname.".format(author.id, user.id)
+                    embed.description = "{} <@{}> removed <@{}>'s nickname.".format(nick_e, author.id, user.id)
                 else:
-                    embed.description = "<:nick:506115462170542120> <@{}> changed **{}**'s nickname to `{}`.".format(author.id, user.name, args)
+                    embed.description = "{} <@{}> changed **{}**'s nickname to `{}`.".format(nick_e, author.id, user.name, args)
                     m = "{}".format(splitter)
-                    m += "\n<:log:506091764415725579> **__Nickname__** <:nick:506115462170542120>"
+                    m += "\n{} **__Nickname__** {}".format(log_e, nick_e)
                     m += "\n`Author:` {} ### {}".format(author, author.id)
                     m += "\n`Target:` {} ### {}".format(user, user.id)
                     m += "\n`Nickname:` {}".format(args)
@@ -572,10 +593,10 @@ async def ban(ctx, user: discord.Member = None, *, args = None):
                     reason = "?"
                 else:
                     reason = args
-                embed.description = "<:ban:506116355318087681> <@{}> banned **{}**.\nReason: {}".format(author.id, user, reason)
+                embed.description = "{} <@{}> banned **{}**.\nReason: {}".format(ban_e, author.id, user, reason)
                 await client.say(embed=embed)
                 m = "{}".format(splitter)
-                m += "\n<:log:506091764415725579> **__Ban__** <:ban:506116355318087681>"
+                m += "\n{} **__Ban__** {}".format(log_e, ban_e)
                 m += "\n`Author:` {} ### {}".format(author, author.id)
                 m += "\n`Target:` {} ### {}".format(user, user.id)
                 m += "\n`Reason:`"
@@ -608,10 +629,10 @@ async def unban(ctx, ID = None):
                 user = await client.get_user_info(ID)
                 try:
                     await client.unban(ctx.message.server, user)
-                    embed.description = "<:unban:506116834760720395> <@{}> unbanned **{}**.".format(author.id, user)
+                    embed.description = "{} <@{}> unbanned **{}**.".format(unban_e, author.id, user)
                     await client.say(embed=embed)
                     m = "{}".format(splitter)
-                    m += "\n<:log:506091764415725579> **__Unban__** <:unban:506116834760720395>"
+                    m += "\n{} **__Unban__** {}".format(log_e, unban_e)
                     m += "\n`Author:` {} ### {}".format(author, author.id)
                     m += "\n`Target:` {} ### {}".format(user, user.id)
                     await client.send_message(client.get_channel(logs), m)
@@ -659,10 +680,10 @@ async def tempban(ctx, user: discord.Member = None, time = None, *, args = None)
                             reason = "?"
                         else:
                             reason = args
-                        embed.description = "<:tempban:506117641149087766> <@{}> tempbanned **{}** for `{}` minute(s).\nReason: {}".format(author.id, user, time, reason)
+                        embed.description = "{} <@{}> tempbanned **{}** for `{}` minute(s).\nReason: {}".format(tempban_e, author.id, user, time, reason)
                         await client.say(embed=embed)
                         m = "{}".format(splitter)
-                        m += "\n<:log:506091764415725579> **__Tempban__** <:tempban:506117641149087766>"
+                        m += "\n{} **__Tempban__** {}".format(tempban_e)
                         m += "\n`Author:` {} ### {}".format(author, author.id)
                         m += "\n`Target:` {} ### {}".format(user, user.id)
                         m += "\n`Time:` {} minute(s)".format(time)
@@ -673,7 +694,7 @@ async def tempban(ctx, user: discord.Member = None, time = None, *, args = None)
                         await asyncio.sleep(float(minutes))
                         try:
                             await client.unban(ctx.message.server, user)
-                            embed.description = "<:unban:506116834760720395> **{}** was automatically unbanned.".format(user)
+                            embed.description = "{} **{}** was automatically unbanned.".format(unban_e, user)
                             await client.say(embed=embed)
                         except:
                             print("")
@@ -712,10 +733,10 @@ async def kick(ctx, user: discord.Member = None, *, args = None):
                     reason = "?"
                 else:
                     reason = args
-                embed.description = "<:kick:506118557050863651> <@{}> kicked **{}**.\nReason: {}".format(author.id, user, reason)
+                embed.description = "{} <@{}> kicked **{}**.\nReason: {}".format(kick_e, author.id, user, reason)
                 await client.say(embed=embed)
                 m = "{}".format(splitter)
-                m += "\n<:log:506091764415725579> **__Kick__** <:kick:506118557050863651>"
+                m += "\n{} **__Kick__** {}".format(log_e, kick_e)
                 m += "\n`Author:` {} ### {}".format(author, author.id)
                 m += "\n`Target:` {} ### {}".format(user, user.id)
                 m += "\n`Reason:`"
@@ -754,10 +775,10 @@ async def takerole(ctx, user: discord.Member = None, *, args = None):
                     else:
                         try:
                             await client.remove_roles(user, i)
-                            embed.description = "<:takerole:506119899064827905> <@{}> removed `{}` from <@{}>'s roles.".format(author.id, i.name, user.id)
+                            embed.description = "{} <@{}> removed `{}` from <@{}>'s roles.".format(takerole_e, author.id, i.name, user.id)
                             await client.say(embed=embed)
                             m = "{}".format(splitter)
-                            m += "\n<:log:506091764415725579> **__Take Role__** <:takerole:506119899064827905>"
+                            m += "\n{} **__Take Role__** {}".format(log_e, takerole_e)
                             m += "\n`Author:` {} ### {}".format(author, author.id)
                             m += "\n`Target:` {} ### {}".format(user, user.id)
                             m += "\n`Role:` {}".format(i.name)
@@ -798,10 +819,10 @@ async def giverole(ctx, user: discord.Member = None, *, args = None):
                     else:
                         try:
                             await client.add_roles(user, i)
-                            embed.description = "<:giverole:506119899014496266> <@{}> added `{}` to <@{}>'s roles.".format(author.id, i.name, user.id)
+                            embed.description = "{} <@{}> added `{}` to <@{}>'s roles.".format(giverole_e, author.id, i.name, user.id)
                             await client.say(embed=embed)
                             m = "{}".format(splitter)
-                            m += "\n<:log:506091764415725579> **__Give Role__** <:giverole:506119899014496266>"
+                            m += "\n{} **__Give Role__** {}".format(log_e, giverole_e)
                             m += "\n`Author:` {} ### {}".format(author, author.id)
                             m += "\n`Target:` {} ### {}".format(user, user.id)
                             m += "\n`Role:` {}".format(i.name)
@@ -839,10 +860,10 @@ async def idban(ctx, target = None, *, args = None):
             try:
                 user = await client.get_user_info(target)
                 await client.http.ban(target, server.id, 0)
-                embed.description = "<:idban:506124539277737985> <@{}> ID banned **{}**.\nReason: {}".format(author.id, user, args)
+                embed.description = "{} <@{}> ID banned **{}**.\nReason: {}".format(idban_e, author.id, user, args)
                 await client.say(embed=embed)
                 m = "{}".format(splitter)
-                m += "\n<:log:506091764415725579> **__ID Ban__** <:idban:506124539277737985>"
+                m += "\n{} **__ID Ban__** {}".format(log_e, idban_e)
                 m += "\n`Author:` {} ### {}".format(author, author.id)
                 m += "\n`Target:` {} ### {}".format(user, user.id)
                 m += "\n`Reason:`"
