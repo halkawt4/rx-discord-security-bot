@@ -859,7 +859,7 @@ async def idban(ctx, target = None, *, args = None):
         else:
             try:
                 user = await client.get_user_info(target)
-                await client.http.ban(target, server.id, 0)
+                await client.http.ban(target, ctx.message.server.id, 0)
                 embed.description = "{} <@{}> ID banned **{}**.\nReason: {}".format(idban_e, author.id, user, args)
                 await client.say(embed=embed)
                 m = "{}".format(splitter)
