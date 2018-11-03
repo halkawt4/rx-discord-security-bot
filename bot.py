@@ -826,7 +826,6 @@ async def giverole(ctx, user: discord.Member = None, *, args = None):
                             m += "\n`Author:` {} ### {}".format(author, author.id)
                             m += "\n`Target:` {} ### {}".format(user, user.id)
                             m += "\n`Role:` {}".format(i.name)
-                            m += "\n```"
                             await client.send_message(client.get_channel(logs), m)
                         except:
                             embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
