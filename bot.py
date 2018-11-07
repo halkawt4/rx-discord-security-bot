@@ -839,6 +839,171 @@ async def giverole(ctx, user: discord.Member = None, *, args = None):
         await client.say(embed=embed)
 
 ''' COMMANDS FOR MANAGERS '''
+# }promote <user> <reason>
+@client.command(pass_context=True)
+async def promote(ctx, user: discord.Member = None, *, args = None):
+    embed = discord.Embed(colour=0x7F1100)
+    embed.set_footer(text=footer_text)
+    author = ctx.message.author
+    owner = discord.utils.get(ctx.message.server.roles, id=owner_role)
+    manager = discord.utils.get(ctx.message.server.roles, id=manager_role)
+    if manager in author.roles or owner in author.roles:
+        if user == None or args == None:
+            embed.description = "{} Not all arguments were given.\nProper usage: `<user> <reason>`.".format(error_e)
+            await client.say(embed=embed)
+        elif user.bot:
+            embed.description = "{} Bots cannot be promoted.".format(error_e)
+            await client.say(embed=embed)
+        elif len(str(args)) > 500:
+            embed.description = "{} The reason cannot be longer than 500 characters.".format(error_e)
+            await client.say(embed=embed)
+        else:
+            embed.description = "{} Loading...".format(loading_e)
+            h = await client.say(embed=embed)
+            staff = discord.utils.get(ctx.message.server.roles, id='469224793359646730')
+            admin = discord.utils.get(ctx.message.server.roles, id=admin_role)
+            mod = discord.utils.get(ctx.message.server.roles, id=mod_role)
+            helper = discord.utils.get(ctx.message.server.roles, id=helper_role)
+            channel = client.get_channel('505745631386796032')
+            roles = {helper : mod,
+                     mod: admin,
+                     admin: manager}
+            o = []
+            if helper not in user.roles and mod not in user.roles and admin not in user.roles and manager not in user.roles and owner not in user.roles:
+                await client.add_roles(user, staff)
+                await asyncio.sleep(1.25)
+                await client.add_roles(user, helper)
+                embed.description = "{} <@{}> has been promoted to <@&{}> by <@{}>.\n`Reason:` {}".format(promote_e, user.id, helper.id, author.id, args)
+                await client.send_message(channel, embed=embed)
+                embed.description = "{} <@{}> promoted <@{}> to <@&{}>.".format(promote_e, author.id, user.id, helper.id)
+                await client.edit_message(h, embed=embed)
+                log = "{}".format(splitter)
+                log += "\n{} **__Promote__** {}".format(log_e, promote_e)
+                log += "\n`Author:` {} ### {}".format(author, author.id)
+                log += "\n`Target:` {} ### {}".format(user, user.id)
+                log += "\n`Role:` {}".format(helper.name)
+                log += "\n`Reason:` {}".format(args)
+                await client.send_message(client.get_channel(logs), log)
+            else:
+                for i in roles:
+                    if i in user.roles:
+                        if roles[i] in author.roles:
+                            embed.description = "{} You cannot promote users with to the same role as you.".format(error_e)
+                            await client.edit_message(h, embed=embed)
+                            o.append("+1")
+                            break
+                        else:
+                            await client.remove_roles(user, i)
+                            await asyncio.sleep(1.25)
+                            await client.add_roles(user, roles[i])
+                            embed.description = "{} <@{}> has been promoted to <@&{}> by <@{}>.\n`Reason:` {}".format(promote_e, user.id, roles[i].id, author.id, args)
+                            await client.send_message(channel, embed=embed)
+                            embed.description = "{} <@{}> promoted <@{}> to <@&{}>.".format(promote_e, author.id, user.id, roles[i].id)
+                            await client.edit_message(h, embed=embed)
+                            o.append("+1")
+                            log = "{}".format(splitter)
+                            log += "\n{} **__Promote__** {}".format(log_e, promote_e)
+                            log += "\n`Author:` {} ### {}".format(author, author.id)
+                            log += "\n`Target:` {} ### {}".format(user, user.id)
+                            log += "\n`Role:` {}".format(roles[i].name)
+                            log += "\n`Reason:` {}".format(args)
+                            await client.send_message(client.get_channel(logs), log)
+                            break
+                if len(o) == 0:
+                    embed.description = "{} There was an error while trying to demote that user.".format(error_e)
+                    await client.edit_message(h, embed=embed)
+    else:
+        embed.description = "{} This command can only be used by Managers and Owners.".format(error_e)
+        await client.say(embed=embed)
+
+# }demote <user> <reason>
+@client.command(pass_context=True)
+async def demote(ctx, user: discord.Member = None, *, args = None):
+    embed = discord.Embed(colour=0x7F1100)
+    embed.set_footer(text=footer_text)
+    author = ctx.message.author
+    owner = discord.utils.get(ctx.message.server.roles, id=owner_role)
+    admin = discord.utils.get(ctx.message.server.roles, id=admin_role)
+    manager = discord.utils.get(ctx.message.server.roles, id=manager_role)
+    if manager in author.roles or owner in author.roles:
+        if user == None or args == None:
+            embed.description = "{} Not all arguments were given.\nProper usages:\n`<user> <reason>`\n`<user> -all <reason>`.".format(error_e)
+            await client.say(embed=embed)
+        elif user.bot:
+            embed.description = "{} Bots cannot be demoted.".format(error_e)
+            await client.say(embed=embed)
+        elif len(str(args)) > 500:
+            embed.description = "{} The reason cannot be longer than 500 characters.".format(error_e)
+            await client.say(embed=embed)
+        else:
+            embed.description = "{} Loading...".format(loading_e)
+            h = await client.say(embed=embed)
+            member = discord.utils.get(ctx.message.server.roles, id='453194601247801354')
+            staff = discord.utils.get(ctx.message.server.roles, id='469224793359646730')
+            mod = discord.utils.get(ctx.message.server.roles, id=mod_role)
+            helper = discord.utils.get(ctx.message.server.roles, id=helper_role)
+            roles = {helper : member,
+                     mod : helper,
+                     admin : mod,
+                     manager : admin}
+            o = []
+            channel = client.get_channel('505745631386796032')
+            if helper not in user.roles and mod not in user.roles and admin not in user.roles and manager not in user.roles and owner not in user.roles:
+                embed.description = "{} That user is not a staff member.".format(error_e)
+                await client.edit_message(h, embed=embed)
+            else:
+                for i in roles:
+                    if i in user.roles:
+                        if i in author.roles:
+                            embed.description = "{} You cannot demote people with the same role as you.".format(error_e)
+                            await client.edit_message(h, embed=embed)
+                            o.append("+1")
+                            break
+                        elif '-all' in str(args):
+                            await client.remove_roles(user, staff)
+                            await asyncio.sleep(1.25)
+                            await client.remove_roles(user, i)
+                            m = args.replace("-all", "")
+                            embed.description = "{} <@{}> has been demoted to <@&{}> by <@{}>.\n`Reason:` {}".format(demote_e, user.id, member.id, author.id, m)
+                            await client.send_message(channel, embed=embed)
+                            embed.description = "{} <@{}> demoted <@{}> to <@&{}>.".format(demote_e, author.id, user.id, member.id)
+                            await client.edit_message(h, embed=embed)
+                            o.append("+1")
+                            log = "{}".format(splitter)
+                            log += "\n{} **__Demote__** {}".format(log_e, demote_e)
+                            log += "\n`Author:` {} ### {}".format(author, author.id)
+                            log += "\n`Target:` {} ### {}".format(user, user.id)
+                            log += "\n`Role:` {}".format(member.name)
+                            log += "\n`Reason:` {}".format(m)
+                            await client.send_message(client.get_channel(logs), log)
+                            break
+                        else:
+                            await client.remove_roles(user, i)
+                            await asyncio.sleep(1.25)
+                            await client.add_roles(user, roles[i])
+                            if i == helper:
+                                await asyncio.sleep(1.25)
+                                await client.remove_roles(user, staff)
+                            embed.description = "{} <@{}> has been demoted to <@&{}> by <@{}>.\n`Reason:` {}".format(demote_e, user.id, roles[i].id, author.id, args)
+                            await client.send_message(channel, embed=embed)
+                            embed.description = "{} <@{}> demoted <@{}> to <@&{}>.".format(demote_e, author.id, user.id, roles[i].id)
+                            await client.edit_message(h, embed=embed)
+                            o.append("+1")
+                            log = "{}".format(splitter)
+                            log += "\n{} **__Demote__** {}".format(log_e, demote_e)
+                            log += "\n`Author:` {} ### {}".format(author, author.id)
+                            log += "\n`Target:` {} ### {}".format(user, user.id)
+                            log += "\n`Role:` {}".format(roles[i].name)
+                            log += "\n`Reason:` {}".format(args)
+                            await client.send_message(client.get_channel(logs), log)
+                            break
+                if len(o) == 0:
+                    embed.description = "{} There was an error while trying to demote that user.".format(error_e)
+                    await client.edit_message(h, embed=embed)
+    else:
+        embed.description = "{} This command can only be used by Managers and Owners.".format(error_e)
+        await client.say(embed=embed)
+        
 # }idban <user id> <reason>
 @client.command(pass_context=True)
 async def idban(ctx, target = None, *, args = None):
