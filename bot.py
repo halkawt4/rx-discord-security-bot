@@ -39,7 +39,7 @@ takerole_e = "<:takerole:507167379201982465>"
 giverole_e = "<:giverole:507167378866700315>"
 idban_e = "<:idban:507167379109838868>"
 promote_e = "<:promote:509729142434955287>"
-demote_e = ":demote:509729142145548309>"
+demote_e = "<:demote:509729142145548309>"
 
 pm_role = '473812644021927946'
 helper_role = '453195469309476877'
