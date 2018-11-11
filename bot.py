@@ -46,6 +46,45 @@ idban_e = "<:idban:507167379109838868>"
 promote_e = "<:promote:509729142434955287>"
 demote_e = "<:demote:509729142145548309>"
 reload_e = "<:reload:510828383765135360>"
+worked_e = "<:worked:511106249895444490>"
+
+help1 = "```diff"
+help1 += "\n--- COMMANDS FOR EVERYONE ---"
+help1 += "\nxm!ping"
+help1 += "\n-    Pings the bot. Used to check if the bot is lagging."
+help1 += "\n"
+help1 += "\n--- COMMANDS FOR SERVER STAFF ---"
+help1 += "\nxm!cb"
+help1 += "\n-    Removes the latest messages sent by bots."
+help1 += "\nxm!mute <user> <minutes> [reason]"
+help1 += "\n-    Mutes the mentioned user for the specified amount of minutes."
+help1 += "\nxm!unmute <user>"
+help1 += "\n-    Unmutes the mentioned user."
+help1 += "\nxm!warn <user> <reason>"
+help1 += "\n-    Warns the mentioned user."
+help1 += "\nxm!check <user>"
+help1 += "\n-    Gives you a list of warnings for the mentioned user."
+help1 += "\nxm!clear <user> <warn number/all>"
+help1 += "\n-    Clears all or a specified warning for the mentioned user."
+help1 += "\nxm!purge <number>"
+help1 += "\n-    Deletes the given amount of messages."
+help1 += "\nxm!nick <user> [nickname]"
+help1 += "\n-    Changes the nickname of the mentioned user or removes it if no nickname is given."
+help1 += "\nxm!ban <user> <reason>"
+help1 += "\n-    Bans the mentioned user."
+help1 += "\nxm!unban <user ID>"
+help1 += "\n-    Unbans the user with the matching ID as the one given."
+help1 += "\nxm!kick <user> <reason>"
+help1 += "\n-    Kicks the mentioned user."
+help1 += "\n"
+help1 += "\n--- COMMANDS FOR OWNERS ---"
+help1 += "\nxm!takerole <user> <role name>"
+help1 += "\n-    Removes a role from the mentioned user."
+help1 += "\nxm!giverole <user> <role name>"
+help1 += "\n-    Adds a role to the mentioned user."
+help1 += "\nxm!idban <user ID> <reason>"
+help1 += "\n-    Bans the user with the matching ID as the one given, their IP and all their alts that aren't already in the server. Works even if the user isn't in the server."
+help1 += "\n```"
 
 owners_role = "510748756858109953"
 xbots_role = "510749122257485835"
@@ -170,6 +209,24 @@ async def ping(ctx, option = None):
         else:
             embed.description = "My ping is `{}`ms.\n{}".format(ping, m)
             await client.say(embed=embed)
+            
+# }help
+@client.command(pass_context=True)
+async def help(ctx):
+    embed = discord.Embed(colour=0x7F1100)
+    embed.set_footer(text=footer_text)
+    if len(started) == 0:
+        embed.description = "{} The bot is restarting. Please try again in a few seconds.".format(reload_e)
+        await client.say(embed=embed)
+    else:
+        if 'xm!' in str(ctx.message.content):
+            try:
+                await client.send_message(ctx.message.author, help1)
+                embed.description = "{} A list of commands has been sent to your DMs.".format(worked_e)
+                await client.say(embed=embed)
+            except:
+                embed.description = "{} I was unable to DM you my list of commands.".format(error_e)
+                await client.say(embed=embed)
 
 ''' COMMANDS FOR STAFF '''
 
@@ -682,6 +739,8 @@ async def kick(ctx, user: discord.Member = None, *, args = None):
             embed.description = "{} This command can only be used by the server staff.".format(error_e)
             await client.say(embed=embed)
 
+''' COMMANDS FOR OWNERS '''
+
 # }takerole <user> <role name>
 @client.command(pass_context=True)
 async def takerole(ctx, user: discord.Member = None, *, args = None):
@@ -693,8 +752,7 @@ async def takerole(ctx, user: discord.Member = None, *, args = None):
     else:
         author = ctx.message.author
         owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
+        if owner in author.roles:
             if user == None or args == None:
                 embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [role name]`.".format(error_e)
                 await client.say(embed=embed)
@@ -726,7 +784,7 @@ async def takerole(ctx, user: discord.Member = None, *, args = None):
                     embed.description = "{} A role with that name was not found.".format(error_e)
                     await client.say(embed=embed)
         else:
-            embed.description = "{} This command can only be used by Administrators, Managers and Owners.".format(error_e)
+            embed.description = "{} This command can only be used by owners.".format(error_e)
             await client.say(embed=embed)
 
 # }giverole <user> <role name>
@@ -740,8 +798,7 @@ async def giverole(ctx, user: discord.Member = None, *, args = None):
     else:
         author = ctx.message.author
         owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
+        if owner in author.roles:
             if user == None or args == None:
                 embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [role name]`.".format(error_e)
                 await client.say(embed=embed)
@@ -773,7 +830,7 @@ async def giverole(ctx, user: discord.Member = None, *, args = None):
                     embed.description = "{} A role with that name was not found.".format(error_e)
                     await client.say(embed=embed)
         else:
-            embed.description = "{} This command can only be used by Administrators, Managers and Owners.".format(error_e)
+            embed.description = "{} This command can only be used by owners.".format(error_e)
             await client.say(embed=embed)
         
 # }idban <user id> <reason>
@@ -788,7 +845,7 @@ async def idban(ctx, target = None, *, args = None):
         author = ctx.message.author
         owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
         staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
+        if owner in author.roles:
             if target == None or args == None:
                 embed.description = "{} The command was used incorrectly.\nProper usage: `<user ID> <reason>`.".format(error_e)
                 await client.say(embed=embed)
@@ -811,7 +868,7 @@ async def idban(ctx, target = None, *, args = None):
                     embed.description = "{} Either I cannot ban the user with that ID or that user ID does not exist.".format(error_e)
                     await client.say(embed=embed)
         else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+            embed.description = "{} This command can only be used by owners.".format(error_e)
             await client.say(embed=embed)
 
 
