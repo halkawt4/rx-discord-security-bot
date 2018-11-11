@@ -10,11 +10,11 @@ import time
 ''''''
 
 Client = discord.Client()
-bot_prefix = ["dev!xm!", "dev}"]
+bot_prefix = ["xm!", "}"]
 client = commands.Bot(command_prefix=bot_prefix)
 footer_text = "[Realm X] - [X Moderation]"
 limit = 1000000000000
-version = "2.0 (DEV)"
+version = "2.0"
 
 warns_chnl = '506089510292029450'
 warns = []
