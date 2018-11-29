@@ -1,4 +1,4 @@
-print("Starting...")
+print("Starting X Moderation...")
 import discord
 from discord.ext.commands import Bot
 from discord.ext import commands
@@ -14,46 +14,64 @@ bot_prefix = ["xm!", "}"]
 client = commands.Bot(command_prefix=bot_prefix)
 footer_text = "[Realm X] - [X Moderation]"
 limit = 1000000000000
-version = "2.0"
+version = "3.0"
+splitter = "**~~`====================`~~**"
 
-warns_chnl = '506089510292029450'
+
 warns = []
 muted_list = []
-joined = []
+owner_roles = []
+manager_roles = []
+admin_roles = []
+mod_roles = []
+helper_roles = []
+muted_roles = []
+logs = []
+
+warns_chnl = '506089510292029450'
+owner_roles_chnl = '517357850264338433'
+manager_roles_chnl = '517357867397808128'
+admin_roles_chnl = '517357880672911360'
+mod_roles_chnl = '517357889602584596'
+helper_roles_chnl = '517357900142870565'
+muted_roles_chnl = '517357914009370685'
+logs_chnl = '517358120561803279'
+log_chnl = '516595345476681758'
 
 loading_e = '<a:loading:484705261609811979>'
-error_e = "<:error:507167378765774858>"
-log_e = "<:log:507167379520880640>"
-auto_e = "<:auto:507167379344588800>"
-pinggood_e = "<:pinggood:507167379533332500>"
-pingok_e = "<:pingok:507167378891735041>"
-pingbad_e = "<:pingbad:507167378975490076>"
-clearbots_e = "<:clearbots:507167378853855233>"
-muted_e = "<:muted:507167379227279370>"
-unmuted_e = "<:unmuted:507167379349045248>"
-warn_e = "<:warn:507167379370016768>"
-checking_e = "<:checking:507167378728026136>"
-clear_e = "<:clear:507167379072221204>"
-purge_e = "<:purge:507167379533332480>"
-nick_e = "<:nick:507167378925420546>"
-ban_e = "<:ban:507167378417909761>"
-unban_e = "<:unban:507167379520749588>"
-tempban_e = "<:tempban:507167379365822464>"
-kick_e = "<:kick:507167379101450240>"
-takerole_e = "<:takerole:507167379201982465>"
-giverole_e = "<:giverole:507167378866700315>"
-idban_e = "<:idban:507167379109838868>"
-promote_e = "<:promote:509729142434955287>"
-demote_e = "<:demote:509729142145548309>"
-reload_e = "<:reload:510828383765135360>"
-worked_e = "<:worked:511106249895444490>"
+error_e = "<:error:517356130968666132>"
+log_e = "<:log:517356131115597824>"
+auto_e = "<:auto:517356130557755396>"
+pinggood_e = "<:pinggood:517356130855550977>"
+pingok_e = "<:pingok:517356130918203394>"
+pingbad_e = "<:pingbad:517356131086106624>"
+clearbots_e = "<:clearbots:517356130855419934>"
+muted_e = "<:muted:517356135972470794>"
+unmuted_e = "<:unmuted:517356137964765193>"
+warn_e = "<:warn:517356131467657226>"
+checking_e = "<:checking:517356130608087051>"
+clear_e = "<:clear:517356137054601216>"
+purge_e = "<:purge:517356131320987649>"
+nick_e = "<:nick:517356137499328513>"
+ban_e = "<:ban:517356130549366784>"
+unban_e = "<:unban:517356131279044628>"
+tempban_e = "<:tempban:517356131245359126>"
+kick_e = "<:kick:517356131895607326>"
+takerole_e = "<:takerole:517356131450880000>"
+giverole_e = "<:giverole:517356130880454656>"
+idban_e = "<:idban:517356137310453760>"
+promote_e = "<:promote:517356131379707907>"
+demote_e = "<:demote:517356137310584843>"
+reload_e = "<:reload:517356130939306020>"
+worked_e = "<:worked:517356137817964545>"
+roles_e = "<:roles:517356131379707905>"
 
 help1 = "```diff"
 help1 += "\n--- COMMANDS FOR EVERYONE ---"
 help1 += "\nxm!ping"
 help1 += "\n-    Pings the bot. Used to check if the bot is lagging."
 help1 += "\n"
-help1 += "\n--- COMMANDS FOR SERVER STAFF ---"
+help1 += "\n--- COMMANDS FOR HELPERS ---"
 help1 += "\nxm!cb"
 help1 += "\n-    Removes the latest messages sent by bots."
 help1 += "\nxm!mute <user> <minutes> [reason]"
@@ -70,6 +88,8 @@ help1 += "\nxm!purge <number>"
 help1 += "\n-    Deletes the given amount of messages."
 help1 += "\nxm!nick <user> [nickname]"
 help1 += "\n-    Changes the nickname of the mentioned user or removes it if no nickname is given."
+help1 += "\n"
+help1 += "\n--- COMMANDS FOR MODERATORS ---"
 help1 += "\nxm!ban <user> <reason>"
 help1 += "\n-    Bans the mentioned user."
 help1 += "\nxm!unban <user ID>"
@@ -77,25 +97,22 @@ help1 += "\n-    Unbans the user with the matching ID as the one given."
 help1 += "\nxm!kick <user> <reason>"
 help1 += "\n-    Kicks the mentioned user."
 help1 += "\n"
-help1 += "\n--- COMMANDS FOR OWNERS ---"
+help1 += "\n--- COMMANDS FOR ADMINISTRATORS ---"
 help1 += "\nxm!takerole <user> <role name>"
 help1 += "\n-    Removes a role from the mentioned user."
 help1 += "\nxm!giverole <user> <role name>"
 help1 += "\n-    Adds a role to the mentioned user."
+help1 += "\n"
+help1 += "\n--- COMMANDS FOR MANAGERS ---"
 help1 += "\nxm!idban <user ID> <reason>"
 help1 += "\n-    Bans the user with the matching ID as the one given, their IP and all their alts that aren't already in the server. Works even if the user isn't in the server."
+help1 += "\n"
+help1 += "\n--- COMMANDS FOR OWNERS ---"
+help1 += "\nxm!setrole <option> <role name>"
+help1 += "\n-    Used to manage roles in the bot's database."
+help1 += "\nxg!log <channel name>"
+help1 += "\n-    Sets the logs channel."
 help1 += "\n```"
-
-owners_role = "510748756858109953"
-xbots_role = "510749122257485835"
-staff_role = "510748890883031050"
-support_role = "510749024114966528"
-members_role = "510749251777855488"
-announcement_role = "510752070522109952"
-partners_role = "510787027051085834"
-muted_role = "510753281945894923"
-splitter = "**~~`====================`~~**"
-log_chnl = "510765922152218637"
 
 ''''''
 
@@ -103,81 +120,72 @@ log_chnl = "510765922152218637"
 started = []
 @client.event
 async def on_ready():
+    async for i in client.logs_from(client.get_channel(owner_roles_chnl), limit=limit):
+        a = i.content.split(' | ')
+        server = client.get_server(a[0])
+        role = discord.utils.get(server.roles, id=a[1])
+        owner_roles.append(role)
+    print("[START UP] Loaded owner roles.")
+    async for i in client.logs_from(client.get_channel(manager_roles_chnl), limit=limit):
+        a = i.content.split(' | ')
+        server = client.get_server(a[0])
+        role = discord.utils.get(server.roles, id=a[1])
+        manager_roles.append(role)
+    print("[START UP] Loaded manager roles.")
+    async for i in client.logs_from(client.get_channel(admin_roles_chnl), limit=limit):
+        a = i.content.split(' | ')
+        server = client.get_server(a[0])
+        role = discord.utils.get(server.roles, id=a[1])
+        admin_roles.append(role)
+    print("[START UP] Loaded administrator roles.")
+    async for i in client.logs_from(client.get_channel(mod_roles_chnl), limit=limit):
+        a = i.content.split(' | ')
+        server = client.get_server(a[0])
+        role = discord.utils.get(server.roles, id=a[1])
+        mod_roles.append(role)
+    print("[START UP] Loaded moderator roles.")
+    async for i in client.logs_from(client.get_channel(helper_roles_chnl), limit=limit):
+        a = i.content.split(' | ')
+        server = client.get_server(a[0])
+        role = discord.utils.get(server.roles, id=a[1])
+        helper_roles.append(role)
+    print("[START UP] Loaded helper roles.")
+    async for i in client.logs_from(client.get_channel(muted_roles_chnl), limit=limit):
+        a = i.content.split(' | ')
+        server = client.get_server(a[0])
+        role = discord.utils.get(server.roles, id=a[1])
+        muted_roles.append(role)
+    print("[START UP] Loaded muted roles.")
+    async for i in client.logs_from(client.get_channel(logs_chnl), limit=limit):
+        logs.append(i.content)
+    print("[START UP] Loaded logs channels.")
     async for i in client.logs_from(client.get_channel(warns_chnl), limit=limit):
         a = i.content.split(' | ')
-        warns.append(a[0])
+        warns.append(a[1])
     print("[START UP] Loaded warnings.")
-    server = client.get_server('452865346081128448')
-    mute = discord.utils.get(server.roles, id=muted_role)
-    try:
-        for i in server.members:
-            if mute in i.roles:
-                await client.remove_roles(i, mute)
-                print("[START UP] Unmuted {}".format(i.id))
-    except:
-        print("[START UP] Error in unmuting everyone.")
     started.append("+1")
     print("[START UP] Finished.")
     await client.change_presence(game=discord.Game(name="}help | }invite"))
     m = splitter
     m += "\n{} **__Bot Restart__** {} `-` Version: {}".format(log_e, reload_e, version)
     t1 = time.perf_counter()
-    await client.send_typing(client.get_channel('510765922152218637'))
+    await client.send_typing(client.get_channel(log_chnl))
     t2 = time.perf_counter()
     m += "\n{} Ping: `{}ms`".format(pingok_e, round((t2-t1)*1000))
-    m += "\n{} Warnings: `{}`".format(warn_e, len(warns))
     await client.send_message(client.get_channel(log_chnl), m)
 
-# ANTI MUTE BYPASS / ANTI JOIN-LEAVE RAID / ANTI ADVERTISE SYSTEMS
+# ANTI MUTE BYPASS
 @client.async_event
-async def on_member_join(userName: discord.User):
-    joined.append(userName.id)
-    server = userName.server
-    if userName.id in muted_role:
-        try:
-            await client.add_roles(server.get_member(userName.id), discord.utils.get(server.roles, id=muted_role))
-        except:
-            print("")
-    a = []
-    for i in joined:
-        if i == userName.id:
-            a.append("+1")
-    embed = discord.Embed(colour=0x7F1100)
-    embed.set_footer(text=footer_text)
-    if len(a) >= 5:
-        await client.http.ban(userName.id, userName.server.id, 0)
-        embed.description = "{} **{}** has been automatically banned.\nReason: Possible raid attempt.".format(auto_e, userName)
-        await client.send_message(client.get_channel('510747587071180801'), embed=embed)
-        m = splitter
-        m += "\n{} **__Auto Ban__** {}".format(log_e, auto_e)
-        m += "\n`Target:` {} ### {}".format(userName, userName.id)
-        m += "\n`Reason:` Possible raid attempt."
-        await client.send_message(client.get_channel(log_chnl), m)
-        async for i in client.logs_from(client.get_channel('510747587071180801'), limit=25):
-            if userName.name in str(i.content) or i.author.id == userName.id or userName.id in str(i.content):
-                await client.delete_message(i)
-        async for i in client.logs_from(client.get_channel('510747536823418880'), limit=25):
-            if userName.name in str(i.content):
-                await client.delete_message(i)
-    if 'gg/' in str(userName.name):
-        try:
-            await client.kick(userName)
-            embed.description = "{} User with ID **{}** has been automatically kicked.\nReason: Advertising by name.".format(auto_e, userName.id)
-            await client.send_message(client.get_channel('510747587071180801'), embed=embed)
-            m = "{}".format(splitter)
-            m += "\n{} **__Auto Kick__** {}".format(log_e, auto_e)
-            m += "\n`Target:` {} ### {}".format(userName, userName.id)
-            m += "\n`Reason:` Advertising by name."
-            await client.send_message(client.get_channel(logs), m)
-        except:
-            print("")
-        async for i in client.logs_from(client.get_channel('510747587071180801'), limit=25):
-            if userName.name in str(i.content) or i.author.id == userName.id or userName.id in str(i.content):
-                await client.delete_message(i)
-        async for i in client.logs_from(client.get_channel('510747536823418880'), limit=25):
-            if userName.name in str(i.content):
-                await client.delete_message(i)
-
+async def on_member_join(user: discord.User):
+    for i in muted_list:
+        a = i.split(' | ')
+        if a[1] == user.id:
+            for u in user.server.roles:
+                if u in muted_roles:
+                    try:
+                        await client.add_roles(user.server.get_member(user.id), u)
+                    except:
+                        print("[ANTI MUTE BYPASS] Error.")
 
 ''' COMMANDS FOR EVERYONE '''
 client.remove_command('help')
@@ -191,25 +199,34 @@ async def ping(ctx, option = None):
         embed.description = "{} The bot is restarting. Please try again in a few seconds.".format(reload_e)
         await client.say(embed=embed)
     else:
-        t1 = time.perf_counter()
-        await client.send_typing(ctx.message.channel)
-        t2 = time.perf_counter()
-        ping = round((t2-t1)*1000)
-        if ping > 300:
-            m = "{} The bot is lagging.".format(pingbad_e)
-        elif ping > 200:
-            m = "{} The bot might be lagging.".format(pingok_e)
-        else:
-            m = "{} The bot isn't lagging.".format(pinggood_e)
         if '}' in str(ctx.message.content):
             if option == "all" or option == "m":
-                
+                t1 = time.perf_counter()
+                await client.send_typing(ctx.message.channel)
+                t2 = time.perf_counter()
+                ping = round((t2-t1)*1000)
+                if ping > 300:
+                    m = "{} The bot is lagging.\nAttempting to fix the bot's ping. This should take about a minute to finish.".format(pingbad_e)
+                elif ping > 200:
+                    m = "{} The bot might be lagging.".format(pingok_e)
+                else:
+                    m = "{} The bot isn't lagging.".format(pinggood_e)
                 embed.description = "My ping is `{}`ms.\n{}".format(ping, m)
                 await client.say(embed=embed)
         else:
+            t1 = time.perf_counter()
+            await client.send_typing(ctx.message.channel)
+            t2 = time.perf_counter()
+            ping = round((t2-t1)*1000)
+            if ping > 300:
+                m = "{} The bot is lagging.\nAttempting to fix the bot's ping. This should take about a minute to finish.".format(pingbad_e)
+            elif ping > 200:
+                m = "{} The bot might be lagging.".format(pingok_e)
+            else:
+                m = "{} The bot isn't lagging.".format(pinggood_e)
             embed.description = "My ping is `{}`ms.\n{}".format(ping, m)
             await client.say(embed=embed)
-            
+
 # }help
 @client.command(pass_context=True)
 async def help(ctx):
@@ -228,8 +245,7 @@ async def help(ctx):
                 embed.description = "{} I was unable to DM you my list of commands.".format(error_e)
                 await client.say(embed=embed)
 
-''' COMMANDS FOR STAFF '''
-
+''' COMMANDS FOR HELPERS '''
 # }cb
 @client.command(pass_context=True)
 async def cb(ctx):
@@ -240,31 +256,32 @@ async def cb(ctx):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if owner in author.roles or staff in author.roles:
-            embed.description = "{} Deleting latest messages sent by bots... {}".format(clearbots_e, loading_e)
-            h = await client.say(embed=embed)
-            a = []
-            msgs = []
-            async for i in client.logs_from(ctx.message.channel):
-                if len(a) < 50:
-                    if i.author.bot and i.id != h.id:
-                        msgs.append(i)
-                        a.append("+1")
-                else:
-                    break
-            try:
-                await client.delete_messages(msgs)
-                embed.description = "{} **{}** removed the latest messages sent by bots.".format(clearbots_e, author.name)
-                await client.edit_message(h, embed=embed)
-            except:
-                for i in msgs:
-                    await client.delete_message(i)
-                embed.description = "{} **{}** removed the latest messages sent by bots.".format(clearbots_e, author.name)
-                await client.edit_message(h, embed=embed)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles, helper_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    embed.description = "{} Deleting latest messages sent by bots... {}".format(clearbots_e, loading_e)
+                    h = await client.say(embed=embed)
+                    msgs = []
+                    async for o in client.logs_from(ctx.message.channel, limit=100, before=ctx.message):
+                        if o.author.bot and o.id != h.id:
+                            msgs.append(o)
+                try:
+                    await client.delete_messages(msgs)
+                    embed.description = "{} **{}** removed the latest messages sent by bots.".format(clearbots_e, author.name)
+                    await client.edit_message(h, embed=embed)
+                except:
+                    for o in msgs:
+                        await client.delete_message(o)
+                    embed.description = "{} **{}** removed the latest messages sent by bots.".format(clearbots_e, author.name)
+                    await client.edit_message(h, embed=embed)
+                a.append("+1")
+                break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by staff.".format(error_e)
             await client.say(embed=embed)
 
 # }mute <user> <minutes> [reason]
@@ -277,62 +294,90 @@ async def mute(ctx, user: discord.Member = None, time = None, *, args = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        muted = discord.utils.get(ctx.message.server.roles, id=muted_role)
-        if owner in author.roles or staff in author.roles:
-            if user == None or time == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <minutes> [reason]`.".format(error_e)
-                await client.say(embed=embed)
-            elif owner in user.roles or staff in user.roles:
-                embed.description = "{} Other server staff cannot be muted.".format(error_e)
-                await client.say(embed=embed)
-            elif muted in user.roles:
-                embed.description = "{} That user is already muted.".format(error_e)
-                await client.say(embed=embed)
-            elif len(str(args)) > 250 and args != None:
-                embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                try:
-                    time2 = int(time)
-                    if time2 > 600 or time2 < 1:
-                        embed.description = "{} You cannot mute someone for longer than 600 minutes and shorter than 1 minute.".format(error_e)
-                        await client.say(embed=embed)
-                    else:
-                        await client.add_roles(user, muted)
-                        muted_list.append(user.id)
-                        minutes = time2 * 60
-                        if args == None:
-                            reason = "?"
+        muted = []
+        for i in muted_roles:
+            if i in ctx.message.server.roles:
+                muted.append(i)
+                break
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles, helper_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if len(muted) != 0:
+                        if user == None or time == None:
+                            embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <minutes> [reason]`.".format(error_e)
+                            await client.say(embed=embed)
+                        elif muted[0] in user.roles:
+                            embed.description = "{} That user is already muted.".format(error_e)
+                            await client.say(embed=embed)
                         else:
-                            reason = args
-                        embed.description = "{} **{}** muted **{}** for `{}` minute(s).\nReason: {}".format(muted_e, author.name, user.name, time, reason)
+                            b = []
+                            for o in roles:
+                                for r in o:
+                                    if r in ctx.message.server.roles and r in user.roles:
+                                        embed.description = "{} Other server staff cannot be muted.".format(error_e)
+                                        await client.say(embed=embed)
+                                        b.append("+1")
+                                        break
+                                if len(b) != 0:
+                                    break
+                            if len(b) == 0:
+                                if len(str(args)) > 250 and args != None:
+                                    embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
+                                    await client.say(embed=embed)
+                                else:
+                                    try:
+                                        time2 = int(time)
+                                        if time2 > 600 or time2 < 1:
+                                            embed.description = "{} You cannot mute someone for longer than 600 minutes and shorter than 1 minute.".format(error_e)
+                                            await client.say(embed=embed)
+                                        else:
+                                            await client.add_roles(user, muted[0])
+                                            muted_list.append(user.id)
+                                            minutes = time2 * 60
+                                            if args == None:
+                                                reason = "?"
+                                            else:
+                                                reason = args
+                                            embed.description = "{} **{}** muted **{}** for `{}` minute(s).\nReason: {}".format(muted_e, author.name, user.name, time, reason)
+                                            await client.say(embed=embed)
+                                            m = splitter
+                                            m += "\n{} **__Mute__** {}".format(log_e, muted_e)
+                                            m += "\n`Author:` {} ### {}".format(author, author.id)
+                                            m += "\n`Target:` {} ### {}".format(user, user.id)
+                                            m += "\n`Time:` {} minute(s)".format(time)
+                                            m += "\n`Reason:` {}".format(reason)
+                                            for o in logs:
+                                                b = o.split(' | ')
+                                                if b[0] == ctx.message.server.id:
+                                                    c = client.get_channel(b[1])
+                                                    await client.send_message(c, m)
+                                                    break
+                                            await asyncio.sleep(float(minutes))
+                                            try:
+                                                try:
+                                                    muted_list.remove(user.id)
+                                                except:
+                                                    print("[AUTO UNMUTE] Unable to remove user from muted list.")
+                                                if muted[0] in user.roles:
+                                                    await client.remove_roles(user, muted[0])
+                                                    embed.description = "{} **{}** was automatically unmuted.".format(unmuted_e, user.name)
+                                                    await client.say(embed=embed)
+                                            except:
+                                                print("[AUTO UNMUTE] Unable to remove role from user.")
+                                    except:
+                                        embed.description = "{} The minutes have to be a number.".format(error_e)
+                                        await client.say(embed=embed)
+                    else:
+                        embed.description = "{} No muted role found.".format(error_e)
                         await client.say(embed=embed)
-                        m = splitter
-                        m += "\n{} **__Mute__** {}".format(log_e, muted_e)
-                        m += "\n`Author:` {} ### {}".format(author, author.id)
-                        m += "\n`Target:` {} ### {}".format(user, user.id)
-                        m += "\n`Time:` {} minute(s)".format(time)
-                        m += "\n`Reason:` {}".format(reason)
-                        await client.send_message(client.get_channel(log_chnl), m)
-                        await asyncio.sleep(float(minutes))
-                        try:
-                            try:
-                                muted_list.remove(user.id)
-                            except:
-                                print("")
-                            if muted in user.roles:
-                                await client.remove_roles(user, muted)
-                                embed.description = "{} **{}** was automatically unmuted.".format(unmuted_e, user.name)
-                                await client.say(embed=embed)
-                        except:
-                            print("")
-                except:
-                    embed.description = "{} The minutes have to be a number.".format(error_e)
-                    await client.say(embed=embed)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by staff.".format(error_e)
             await client.say(embed=embed)
 
 # }unmute <user>
@@ -345,31 +390,50 @@ async def unmute(ctx, user: discord.Member = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        muted = discord.utils.get(ctx.message.server.roles, id=muted_role)
-        if owner in author.roles or staff in author.roles:
-            if user == None:
-                embed.description = "{} Please mention the user you want to unmute.".format(error_e)
-                await client.say(embed=embed)
-            elif muted in user.roles:
-                try:
-                    punished_list.remove(user.id)
-                except:
-                    print("")
-                await client.remove_roles(user, muted)
-                embed.description = "{} **{}** unmuted **{}**.".format(unmuted_e, author.name, user.name)
-                await client.say(embed=embed)
-                m = splitter
-                m += "\n{} **__Unmute__** {}".format(log_e, unmuted_e)
-                m += "\n`Author:` {} ### {}".format(author, author.id)
-                m += "\n`Target:` {} ### {}".format(user, user.id)
-                await client.send_message(client.get_channel(log_chnl), m)
-            else:
-                embed.description = "{} That user is not muted.".format(error_e)
-                await client.say(embed=embed)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+        muted = []
+        for i in muted_roles:
+            if i in ctx.message.server.roles:
+                muted.append(i)
+                break
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles, helper_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if len(muted) != 0:
+                        if user == None:
+                            embed.description = "{} Please mention the user you want to unmute.".format(error_e)
+                            await client.say(embed=embed)
+                        elif muted[0] in user.roles:
+                            try:
+                                muted_list.remove(user.id)
+                            except:
+                                print("[UNMUTE] Unable to remove user from muted list.")
+                            await client.remove_roles(user, muted[0])
+                            embed.description = "{} **{}** unmuted **{}**.".format(unmuted_e, author.name, user.name)
+                            await client.say(embed=embed)
+                            m = splitter
+                            m += "\n{} **__Unmute__** {}".format(log_e, unmuted_e)
+                            m += "\n`Author:` {} ### {}".format(author, author.id)
+                            m += "\n`Target:` {} ### {}".format(user, user.id)
+                            for o in logs:
+                                b = o.split(' | ')
+                                if b[0] == ctx.message.server.id:
+                                    c = client.get_channel(b[1])
+                                    await client.send_message(c, m)
+                                    break
+                        else:
+                            embed.description = "{} That user is not muted.".format(error_e)
+                            await client.say(embed=embed)
+                    else:
+                        embed.description = "{} No muted role found.".format(error_e)
+                        await client.say(embed=embed)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by staff.".format(error_e)
             await client.say(embed=embed)
 
 # }warn <user> <reason>
@@ -382,47 +446,71 @@ async def warn(ctx, user: discord.Member = None, *, args = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
-            if user == None or args == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <reason>`.".format(error_e)
-                await client.say(embed=embed)
-            elif staff in user.roles or owner in user.roles or user.bot:
-                embed.description = "{} Other server staff and bots cannot be warned.".format(error_e)
-                await client.say(embed=embed)
-            elif len(str(args)) > 250:
-                embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                if warns.count(user.id) >= 5:
-                    await client.ban(user)
-                    embed.description = "{} **{}** has been automatically banned.\nReason: Reached max warnings.".format(auto_e, user)
-                    await client.say(embed=embed)
-                    m = splitter
-                    m += "\n{} **__Auto Ban__** {}".format(log_e, auto_e)
-                    m += "\n`Target:` {} ### {}".format(user, user.id)
-                    m += "\n`Reason:` Reached max warnings."
-                    await client.send_message(client.get_channel(log_chnl), m)
-                else:
-                    try:
-                        embed.description = "{} You have been warned in **Realm ✘**.\nReason: {}".format(warn_e, args)
-                        await client.send_message(user, embed=embed)
-                        embed.description = "{} **{}** warned **{}**.\nReason: {}".format(warn_e, author.name, user.name, args)
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles, helper_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if user == None or args == None:
+                        embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <reason>`.".format(error_e)
                         await client.say(embed=embed)
-                    except:
-                        embed.description = "{} **{}** warned **{}**.\nReason: {}".format(warn_e, author.name, user.name, args)
-                        await client.say("<@{}>".format(user.id), embed=embed)
-                    warns.append(user.id)
-                    await client.send_message(client.get_channel(warns_chnl), "{} | {} ### {} | {}".format(user.id, author, author.id, args))
-                    m = splitter
-                    m += "\n{} **__Warning__** {}".format(log_e, warn_e)
-                    m += "\n`Author:` {} ### {}".format(author, author.id)
-                    m += "\n`Target:` {} ### {}".format(user, user.id)
-                    m += "\n`Reason:` {}".format(args)
-                    await client.send_message(client.get_channel(log_chnl), m)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+                    else:
+                        b = []
+                        for o in roles:
+                            for r in o:
+                                if r in ctx.message.server.roles and r in user.roles:
+                                    embed.description = "{} Other server staff and bots cannot be warned.".format(error_e)
+                                    await client.say(embed=embed)
+                                    b.append("+1")
+                                    break
+                            if len(b) != 0:
+                                break
+                        if len(b) == 0:
+                            if len(str(args)) > 250:
+                                embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
+                                await client.say(embed=embed)
+                            elif warns.count(user.id) >= 5:
+                                await client.ban(user)
+                                embed.description = "{} **{}** has been automatically banned.\nReason: Reached max warnings.".format(auto_e, user)
+                                await client.say(embed=embed)
+                                m = splitter
+                                m += "\n{} **__Auto Ban__** {}".format(log_e, auto_e)
+                                m += "\n`Target:` {} ### {}".format(user, user.id)
+                                m += "\n`Reason:` Reached max warnings."
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                            else:
+                                try:
+                                    embed.description = "{} You have been warned in **Realm ✘**.\nReason: {}".format(warn_e, args)
+                                    await client.send_message(user, embed=embed)
+                                    embed.description = "{} **{}** warned **{}**.\nReason: {}".format(warn_e, author.name, user.name, args)
+                                    await client.say(embed=embed)
+                                except:
+                                    embed.description = "{} **{}** warned **{}**.\nReason: {}".format(warn_e, author.name, user.name, args)
+                                    await client.say("<@{}>".format(user.id), embed=embed)
+                                warns.append(user.id)
+                                await client.send_message(client.get_channel(warns_chnl), "{} | {} | {} | {}".format(ctx.message.server.name, user.id, author.id, args))
+                                m = splitter
+                                m += "\n{} **__Warning__** {}".format(log_e, warn_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Target:` {} ### {}".format(user, user.id)
+                                m += "\n`Reason:` {}".format(args)
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by staff.".format(error_e)
             await client.say(embed=embed)
 
 # }check <user>
@@ -435,36 +523,34 @@ async def check(ctx, user: discord.Member = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
-            if user == None:
-                embed.description = "{} Please mention the user you want to check.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                if warns.count(user.id) == 0:
-                    embed.description = "{} No warnings found for **{}**.".format(checking_e, user.name)
-                    await client.say(embed=embed)
-                else:
-                    embed.description = "{} Checking warnings... {}".format(checking_e, loading_e)
-                    h = await client.say(embed=embed)
-                    p = []
-                    embed2 = discord.Embed(colour=0x7F1100)
-                    embed2.set_footer(text=footer_text)
-                    embed2.description = "{} Warning data for **{}** ( `{}` ):".format(checking_e, user, user.id)
-                    async for i in client.logs_from(client.get_channel(warns_chnl), limit=limit):
-                        a = i.content.split(' | ')
-                        p.append("+1")
-                        if a[0] == user.id:
-                            embed2.add_field(name="{} **__Warning Number:__** `{}`".format(warn_e, i.id), value="`Warned by:` {}\n`Reason:` {}".format(a[1], a[2]))
-                    try:
-                        await client.send_message(author, embed=embed2)
-                        embed.description = "{} The warning data for **{}** has been sent to **{}**'s DMs.".format(checking_e, user.name, author.name)
-                        await client.edit_message(h, embed=embed)
-                    except:
-                        await client.edit_message(h, embed=embed2)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles, helper_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if user == None:
+                        embed.description = "{} Please mention the user you want to check.".format(error_e)
+                        await client.say(embed=embed)
+                    else:
+                        if warns.count(user.id) == 0:
+                            embed.description = "{} No warnings found for **{}**.".format(checking_e, user.name)
+                            await client.say(embed=embed)
+                        else:
+                            embed.description = "{} Checking warnings... {}".format(checking_e, loading_e)
+                            h = await client.say(embed=embed)
+                            embed.description = "{} Warning data for **{}** ( `{}` ):".format(checking_e, user, user.id)
+                            async for o in client.logs_from(client.get_channel(warns_chnl), limit=limit):
+                                b = o.content.split(' | ')
+                                if b[1] == user.id:
+                                    r = await client.get_user_info(b[2])
+                                    embed.add_field(name="{} **__Warning Number:__** `{}`".format(warn_e, o.id), value="`Warned by:` {} ### {}\n`Reason:` {}\n`Warned in:` {}".format(r, r.id, b[3], b[0]))
+                            await client.edit_message(h, embed=embed)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by staff.".format(error_e)
             await client.say(embed=embed)
 
 # }clear <user> <warn number/all>
@@ -477,56 +563,73 @@ async def clear(ctx, user: discord.Member = None, target = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
-            if user == None or target == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <warn number/all>`.".format(error_e)
-                await client.say(embed=embed)
-            elif warns.count(user.id) == 0:
-                embed.description = "{} No warnings found for **{}**.".format(clear_e, user.name)
-                await client.say(embed=embed)
-            elif target == "all":
-                embed.description = "{} Checking warnings... {}".format(clear_e, loading_e)
-                h = await client.say(embed=embed)
-                o = []
-                async for i in client.logs_from(client.get_channel(warns_chnl), limit=10000000):
-                    a = i.content.split(' | ')
-                    if a[0] == user.id:
-                        await client.delete_message(i)
-                        o.append("+1")
-                embed.description = "{} **{}** cleared `{}` warning(s) for **{}**.".format(clear_e, author.name, len(o), user.name)
-                await client.edit_message(h, embed=embed)
-                m = splitter
-                m += "\n{} **__Clear Warnings__** {}".format(log_e, clear_e)
-                m += "\n`Author:` {} ### {}".format(author, author.id)
-                m += "\n`Target:` {} ### {}".format(user, user.id)
-                m += "\n`Number:` {} (all)".format(len(o))
-                await client.send_message(client.get_channel(log_chnl), m)
-            else:
-                embed.description = "{} Checking warnings... {}".format(clear_e, loading_e)
-                h = await client.say(embed=embed)
-                o = []
-                async for i in client.logs_from(client.get_channel(warns_chnl), limit=10000000):
-                    a = i.content.split(' | ')
-                    if a[0] == user.id and i.id == target:
-                        await client.delete_message(i)
-                        o.append("+1")
-                        break
-                if len(o) == 0:
-                    embed.description = "{} A warning with that number was not found.".format(error_e)
-                    await client.edit_message(h, embed=embed)
-                else:
-                    embed.description = "{} **{}** cleared `1` warning for **{}**.".format(clear_e, author.name, user.name)
-                    await client.edit_message(h, embed=embed)
-                    m = splitter
-                    m += "\n{} **__Clear Warnings__** {}".format(log_e, clear_e)
-                    m += "\n`Author:` {} ### {}".format(author, author.id)
-                    m += "\n`Target:` {} ### {}".format(user, user.id)
-                    m += "\n`Number:` {}".format(len(o))
-                    await client.send_message(client.get_channel(log_chnl), m)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles, helper_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if user == None or target == None:
+                        embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <warn number/all>`.".format(error_e)
+                        await client.say(embed=embed)
+                    elif warns.count(user.id) == 0:
+                        embed.description = "{} No warnings found for **{}**.".format(clear_e, user.name)
+                        await client.say(embed=embed)
+                    elif target == "all":
+                        embed.description = "{} Clearing warnings... {}".format(clear_e, loading_e)
+                        h = await client.say(embed=embed)
+                        p = []
+                        async for o in client.logs_from(client.get_channel(warns_chnl), limit=limit):
+                            b = o.content.split(' | ')
+                            if b[1] == user.id:
+                                await client.delete_message(o)
+                                p.append("+1")
+                        embed.description = "{} **{}** cleared `{}` warning(s) for **{}**.".format(clear_e, author.name, len(p), user.name)
+                        await client.edit_message(h, embed=embed)
+                        m = splitter
+                        m += "\n{} **__Clear Warnings__** {}".format(log_e, clear_e)
+                        m += "\n`Author:` {} ### {}".format(author, author.id)
+                        m += "\n`Target:` {} ### {}".format(user, user.id)
+                        m += "\n`Number:` {} (all)".format(len(p))
+                        for o in logs:
+                            b = o.split(' | ')
+                            if b[0] == ctx.message.server.id:
+                                c = client.get_channel(b[1])
+                                await client.send_message(c, m)
+                                break
+                    else:
+                        embed.description = "{} Clearing warning... {}".format(clear_e, loading_e)
+                        h = await client.say(embed=embed)
+                        p = []
+                        async for o in client.logs_from(client.get_channel(warns_chnl), limit=limit):
+                            b = o.content.split(' | ')
+                            if b[1] == user.id and o.id == target:
+                                await client.delete_message(o)
+                                warns.remove(user.id)
+                                p.append("+1")
+                                break
+                        if len(p) == 0:
+                            embed.description = "{} A warning with that number was not found.".format(error_e)
+                            await client.edit_message(h, embed=embed)
+                        else:
+                            embed.description = "{} **{}** cleared `1` warning for **{}**.".format(clear_e, author.name, user.name)
+                            await client.edit_message(h, embed=embed)
+                            m = splitter
+                            m += "\n{} **__Clear Warnings__** {}".format(log_e, clear_e)
+                            m += "\n`Author:` {} ### {}".format(author, author.id)
+                            m += "\n`Target:` {} ### {}".format(user, user.id)
+                            m += "\n`Number:` {}".format(len(p))
+                            for o in logs:
+                                b = o.split(' | ')
+                                if b[0] == ctx.message.server.id:
+                                    c = client.get_channel(b[1])
+                                    await client.send_message(c, m)
+                                    break
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by staff.".format(error_e)
             await client.say(embed=embed)
 
 # }purge <number>
@@ -539,45 +642,61 @@ async def purge(ctx, number = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
-            if number == None:
-                embed.description = "{} Please give the number of messages you want to delete.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                try:
-                    amount = int(number)
-                    try:
-                        await client.delete_message(ctx.message)
-                        deleted = await client.purge_from(ctx.message.channel, limit=amount)
-                        embed.description = "{} **{}** deleted `{}` messages.".format(purge_e, author.name, len(deleted))
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles, helper_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if number == None:
+                        embed.description = "{} Please give the number of messages you want to delete.".format(error_e)
                         await client.say(embed=embed)
-                        m = splitter
-                        m += "\n{} **__Purge__** {}".format(log_e, purge_e)
-                        m += "\n`Author:` {} ### {}".format(author, author.id)
-                        m += "\n`Channel:` {} ### {}".format(ctx.message.channel.name, ctx.message.channel.id)
-                        m += "\n`Number:` {}/{}".format(len(deleted), number)
-                        await client.send_message(client.get_channel(log_chnl), m)
-                    except:
-                        deleted = []
-                        await client.delete_message(ctx.message)
-                        async for i in client.logs_from(ctx.message.channel, limit=amount):
-                            await client.delete_message(i)
-                            deleted.append("+1")
-                            await asyncio.sleep(float(1.25))
-                        embed.description = "{} **{}** deleted `{}` messages.".format(purge_e, author.name, len(deleted))
-                        await client.say(embed=embed)
-                        m = splitter
-                        m += "\n{} **__Purge__** {}".format(log_e, purge_e)
-                        m += "\n`Author:` {} ### {}".format(author, author.id)
-                        m += "\n`Channel:` {} ### {}".format(ctx.message.channel.name, ctx.message.channel.id)
-                        m += "\n`Number:` {}/{}".format(len(deleted), number)
-                        await client.send_message(client.get_channel(log_chnl), m)
-                except:
-                    embed.description = "{} That is not a valid number.".format(error_e)
-                    await client.say(embed=embed)
-        else:
+                    else:
+                        try:
+                            amount = int(number)
+                            try:
+                                await client.delete_message(ctx.message)
+                                deleted = await client.purge_from(ctx.message.channel, limit=amount)
+                                embed.description = "{} **{}** deleted `{}` messages.".format(purge_e, author.name, len(deleted))
+                                await client.say(embed=embed)
+                                m = splitter
+                                m += "\n{} **__Purge__** {}".format(log_e, purge_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Channel:` {} ### {}".format(ctx.message.channel.name, ctx.message.channel.id)
+                                m += "\n`Number:` {}/{}".format(len(deleted), number)
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                            except:
+                                deleted = []
+                                await client.delete_message(ctx.message)
+                                async for i in client.logs_from(ctx.message.channel, limit=amount):
+                                    await client.delete_message(i)
+                                    deleted.append("+1")
+                                    await asyncio.sleep(float(1.25))
+                                embed.description = "{} **{}** deleted `{}` messages.".format(purge_e, author.name, len(deleted))
+                                await client.say(embed=embed)
+                                m = splitter
+                                m += "\n{} **__Purge__** {}".format(log_e, purge_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Channel:` {} ### {}".format(ctx.message.channel.name, ctx.message.channel.id)
+                                m += "\n`Number:` {}/{}".format(len(deleted), number)
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                        except:
+                            embed.description = "{} Invalid number given.".format(error_e)
+                            await client.say(embed=embed)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
             embed.description = "{} This command can only be used by staff.".format(error_e)
             await client.say(embed=embed)
 
@@ -591,36 +710,60 @@ async def nick(ctx, user: discord.Member = None, *, args = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
-            if user == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [nickname]`.".format(error_e)
-                await client.say(embed=embed)
-            elif len(str(args)) > 32 and args != None:
-                embed.description = "{} The nickname cannot be longer than 32 characters.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                try:
-                    await client.change_nickname(user, args)
-                    if args == None:
-                        embed.description = "{} **{}** removed **{}**'s nickname.".format(nick_e, author.name, user.name)
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles, helper_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if user == None:
+                        embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [nickname]`.".format(error_e)
+                        await client.say(embed=embed)
+                    elif len(str(args)) > 32 and args != None:
+                        embed.description = "{} The nickname cannot be longer than 32 characters.".format(error_e)
+                        await client.say(embed=embed)
                     else:
-                        embed.description = "{} **{}** changed **{}**'s nickname to `{}`.".format(nick_e, author.name, user.name, args)
-                        m = splitter
-                        m += "\n{} **__Nickname__** {}".format(log_e, nick_e)
-                        m += "\n`Author:` {} ### {}".format(author, author.id)
-                        m += "\n`Target:` {} ### {}".format(user, user.id)
-                        m += "\n`Nickname:` {}".format(args)
-                        await client.send_message(client.get_channel(log_chnl), m)
-                    await client.say(embed=embed)
-                except:
-                    embed.description = "{} I was unable to edit **{}**'s nickname.".format(error_e, user.name)
-                    await client.say(embed=embed)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+                        try:
+                            await client.change_nickname(user, args)
+                            if args == None:
+                                embed.description = "{} **{}** removed **{}**'s nickname.".format(nick_e, author.name, user.name)
+                                await client.say(embed=embed)
+                                m = splitter
+                                m += "\n{} **__Nickname__** {}".format(log_e, nick_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Target:` {} ### {}".format(user, user.id)
+                                m += "\n`Nickname:` 'cleared'"
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                            else:
+                                embed.description = "{} **{}** changed **{}**'s nickname to `{}`.".format(nick_e, author.name, user.name, args)
+                                await client.say(embed=embed)
+                                m = splitter
+                                m += "\n{} **__Nickname__** {}".format(log_e, nick_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Target:` {} ### {}".format(user, user.id)
+                                m += "\n`Nickname:` {}".format(args)
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                        except:
+                            embed.description = "{} Unable to edit **{}**'s nickname.".format(error_e, user.name)
+                            await client.say(embed=embed)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by staff.".format(error_e)
             await client.say(embed=embed)
 
+''' COMMANDS FOR MODERATORS '''
 # }ban <user> <reason>
 @client.command(pass_context=True)
 async def ban(ctx, user: discord.Member = None, *, args = None):
@@ -631,34 +774,54 @@ async def ban(ctx, user: discord.Member = None, *, args = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
-            if user == None or args == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <reason>`.".format(error_e)
-                await client.say(embed=embed)
-            elif staff in user.roles or owner in user.roles:
-                embed.description = "{} Other staff can only be banned manually.".format(error_e)
-                await client.say(embed=embed)
-            elif len(str(args)) > 250:
-                embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                try:
-                    await client.ban(user)
-                    embed.description = "{} **{}** banned **{}**.\nReason: {}".format(ban_e, author.name, user, args)
-                    await client.say(embed=embed)
-                    m = splitter
-                    m += "\n{} **__Ban__** {}".format(log_e, ban_e)
-                    m += "\n`Author:` {} ### {}".format(author, author.id)
-                    m += "\n`Target:` {} ### {}".format(user, user.id)
-                    m += "\n`Reason:` {}".format(args)
-                    await client.send_message(client.get_channel(logs), m)
-                except:
-                    embed.description = "{} I am unable to ban that user.".format(error_e)
-                    await client.say(embed=embed)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if user == None or args == None:
+                        embed.description = "{} The command was used incorrectly.\nProper usage: `<user> <reason>`.".format(error_e)
+                        await client.say(embed=embed)
+                    else:
+                        b = []
+                        for o in roles:
+                            for r in o:
+                                if r in ctx.message.server.roles and r in user.roles:
+                                    embed.description = "{} Other staff can only be banned manually.".format(error_e)
+                                    await client.say(embed=embed)
+                                    b.append("+1")
+                                    break
+                            if len(b) != 0:
+                                break
+                        if len(b) == 0:
+                            if len(str(args)) > 250:
+                                embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
+                                await client.say(embed=embed)
+                            else:
+                                try:
+                                    await client.ban(user)
+                                    embed.description = "{} **{}** banned **{}**.\nReason: {}".format(ban_e, author.name, user, args)
+                                    await client.say(embed=embed)
+                                    m = splitter
+                                    m += "\n{} **__Ban__** {}".format(log_e, ban_e)
+                                    m += "\n`Author:` {} ### {}".format(author, author.id)
+                                    m += "\n`Target:` {} ### {}".format(user, user.id)
+                                    m += "\n`Reason:` {}".format(args)
+                                    for o in logs:
+                                        b = o.split(' | ')
+                                        if b[0] == ctx.message.server.id:
+                                            c = client.get_channel(b[1])
+                                            await client.send_message(c, m)
+                                            break
+                                except:
+                                    embed.description = "{} I am unable to ban that user.".format(error_e)
+                                    await client.say(embed=embed)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by moderators, administrators, managers and owners.".format(error_e)
             await client.say(embed=embed)
 
 # }unban <user id>
@@ -671,32 +834,43 @@ async def unban(ctx, ID = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
-            if ID == None:
-                embed.description = "{} Please give the user ID you want to unban.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                try:
-                    user = await client.get_user_info(ID)
-                    try:
-                        await client.unban(ctx.message.server, user)
-                        embed.description = "{} **{}** unbanned **{}**.".format(unban_e, author.name, user)
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if ID == None:
+                        embed.description = "{} Please give the user ID you want to unban.".format(error_e)
                         await client.say(embed=embed)
-                        m = splitter
-                        m += "\n{} **__Unban__** {}".format(log_e, unban_e)
-                        m += "\n`Author:` {} ### {}".format(author, author.id)
-                        m += "\n`Target:` {} ### {}".format(user, user.id)
-                        await client.send_message(client.get_channel(log_chnl), m)
-                    except:
-                        embed.description = "{} The user with that ID is not banned.".format(error_e)
-                        await client.say(embed=embed)
-                except:
-                    embed.description = "{} A user with that ID was not found.".format(error_e)
-                    await client.say(embed=embed)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+                    else:
+                        try:
+                            user = await client.get_user_info(ID)
+                            try:
+                                await client.unban(ctx.message.server, user)
+                                embed.description = "{} **{}** unbanned **{}**.".format(unban_e, author.name, user)
+                                await client.say(embed=embed)
+                                m = splitter
+                                m += "\n{} **__Unban__** {}".format(log_e, unban_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Target:` {} ### {}".format(user, user.id)
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                            except:
+                                embed.description = "{} The user with that ID is not banned.".format(error_e)
+                                await client.say(embed=embed)
+                        except:
+                            embed.description = "{} A user with that ID was not found.".format(error_e)
+                            await client.say(embed=embed)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by moderators, administrators, managers and owners.".format(error_e)
             await client.say(embed=embed)
 
 # }kick <user> <reason>
@@ -709,38 +883,57 @@ async def kick(ctx, user: discord.Member = None, *, args = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if staff in author.roles or owner in author.roles:
-            if user == None or args == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [reason]`.".format(error_e)
-                await client.say(embed=embed)
-            elif staff in user.roles or owner in user.roles:
-                embed.description = "{} Other staff can only be kicked manually.".format(error_e)
-                await client.say(embed=embed)
-            elif len(str(args)) > 250:
-                embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                try:
-                    await client.kick(user)
-                    embed.description = "{} **{}** kicked **{}**.\nReason: {}".format(kick_e, author.name, user, reason)
-                    await client.say(embed=embed)
-                    m = splitter
-                    m += "\n{} **__Kick__** {}".format(log_e, kick_e)
-                    m += "\n`Author:` {} ### {}".format(author, author.id)
-                    m += "\n`Target:` {} ### {}".format(user, user.id)
-                    m += "\n`Reason:` {}".format(args)
-                    await client.send_message(client.get_channel(log_chnl), m)
-                except:
-                    embed.description = "{} I am unable to kick that user.".format(error_e)
-                    await client.say(embed=embed)
-        else:
-            embed.description = "{} This command can only be used by the server staff.".format(error_e)
+        roles = [owner_roles, manager_roles, admin_roles, mod_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if user == None or args == None:
+                        embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [reason]`.".format(error_e)
+                        await client.say(embed=embed)
+                    else:
+                        b = []
+                        for o in roles:
+                            for r in o:
+                                if r in ctx.message.server.roles and r in user.roles:
+                                    embed.description = "{} Other staff can only be banned manually.".format(error_e)
+                                    await client.say(embed=embed)
+                                    b.append("+1")
+                                    break
+                            if len(b) != 0:
+                                break
+                        if len(b) == 0:
+                            if len(str(args)) > 250:
+                                embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
+                                await client.say(embed=embed)
+                            else:
+                                try:
+                                    await client.kick(user)
+                                    embed.description = "{} **{}** kicked **{}**.\nReason: {}".format(kick_e, author.name, user, args)
+                                    await client.say(embed=embed)
+                                    m = splitter
+                                    m += "\n{} **__Kick__** {}".format(log_e, kick_e)
+                                    m += "\n`Author:` {} ### {}".format(author, author.id)
+                                    m += "\n`Target:` {} ### {}".format(user, user.id)
+                                    m += "\n`Reason:` {}".format(args)
+                                    for o in logs:
+                                        b = o.split(' | ')
+                                        if b[0] == ctx.message.server.id:
+                                            c = client.get_channel(b[1])
+                                            await client.send_message(c, m)
+                                            break
+                                except:
+                                    embed.description = "{} I am unable to kick that user.".format(error_e)
+                                    await client.say(embed=embed)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by moderators, administrators, managers and owners.".format(error_e)
             await client.say(embed=embed)
 
-''' COMMANDS FOR OWNERS '''
-
+''' COMMANDS FOR ADMINISTRATORS '''
 # }takerole <user> <role name>
 @client.command(pass_context=True)
 async def takerole(ctx, user: discord.Member = None, *, args = None):
@@ -751,40 +944,52 @@ async def takerole(ctx, user: discord.Member = None, *, args = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        if owner in author.roles:
-            if user == None or args == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [role name]`.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                a = []
-                for i in ctx.message.server.roles:
-                    if args.lower() in str(i.name.lower()):
-                        a.append("+1")
-                        if author.top_role <= i:
-                            embed.description = "{} You cannot remove a role that is the same or higher than your top role.".format(error_e)
+        roles = [owner_roles, manager_roles, admin_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if user == None or args == None:
+                        embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [role name]`.".format(error_e)
+                        await client.say(embed=embed)
+                    else:
+                        b = []
+                        for o in ctx.message.server.roles:
+                            if args.lower() in str(o.name.lower()):
+                                b.append("+1")
+                                if author.top_role <= o:
+                                    embed.description = "{} You cannot remove a role that is the same or higher than your top role.".format(error_e)
+                                    await client.say(embed=embed)
+                                    break
+                                else:
+                                    try:
+                                        await client.remove_roles(user, o)
+                                        embed.description = "{} **{}** removed `{}` from **{}**'s roles.".format(takerole_e, author.name, o.name, user.name)
+                                        await client.say(embed=embed)
+                                        m = splitter
+                                        m += "\n{} **__Take Role__** {}".format(log_e, takerole_e)
+                                        m += "\n`Author:` {} ### {}".format(author, author.id)
+                                        m += "\n`Target:` {} ### {}".format(user, user.id)
+                                        m += "\n`Role:` {}".format(o.name)
+                                        for o in logs:
+                                            b = o.split(' | ')
+                                            if b[0] == ctx.message.server.id:
+                                                c = client.get_channel(b[1])
+                                                await client.send_message(c, m)
+                                                break
+                                    except:
+                                        embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
+                                        await client.say(embed=embed)
+                                    break
+                        if len(b) == 0:
+                            embed.description = "{} A role with that name was not found.".format(error_e)
                             await client.say(embed=embed)
-                            break
-                        else:
-                            try:
-                                await client.remove_roles(user, i)
-                                embed.description = "{} **{}** removed `{}` from **{}**'s roles.".format(takerole_e, author.id, i.name, user.name)
-                                await client.say(embed=embed)
-                                m = splitter
-                                m += "\n{} **__Take Role__** {}".format(log_e, takerole_e)
-                                m += "\n`Author:` {} ### {}".format(author, author.id)
-                                m += "\n`Target:` {} ### {}".format(user, user.id)
-                                m += "\n`Role:` {}".format(i.name)
-                                await client.send_message(client.get_channel(log_chnl), m)
-                            except:
-                                embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
-                                await client.say(embed=embed)
-                            break
-                if len(a) == 0:
-                    embed.description = "{} A role with that name was not found.".format(error_e)
-                    await client.say(embed=embed)
-        else:
-            embed.description = "{} This command can only be used by owners.".format(error_e)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by administrators, managers and owners.".format(error_e)
             await client.say(embed=embed)
 
 # }giverole <user> <role name>
@@ -797,42 +1002,55 @@ async def giverole(ctx, user: discord.Member = None, *, args = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        if owner in author.roles:
-            if user == None or args == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [role name]`.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                a = []
-                for i in ctx.message.server.roles:
-                    if args.lower() in str(i.name.lower()):
-                        a.append("+1")
-                        if author.top_role <= i:
-                            embed.description = "{} You cannot give a role that is the same or higher than your top role.".format(error_e)
+        roles = [owner_roles, manager_roles, admin_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if user == None or args == None:
+                        embed.description = "{} The command was used incorrectly.\nProper usage: `<user> [role name]`.".format(error_e)
+                        await client.say(embed=embed)
+                    else:
+                        b = []
+                        for o in ctx.message.server.roles:
+                            if args.lower() in str(o.name.lower()):
+                                b.append("+1")
+                                if author.top_role <= o:
+                                    embed.description = "{} You cannot give a role that is the same or higher than your top role.".format(error_e)
+                                    await client.say(embed=embed)
+                                    break
+                                else:
+                                    try:
+                                        await client.add_roles(user, o)
+                                        embed.description = "{} **{}** added `{}` to **{}**'s roles.".format(giverole_e, author.name, o.name, user.name)
+                                        await client.say(embed=embed)
+                                        m = splitter
+                                        m += "\n{} **__Give Role__** {}".format(log_e, giverole_e)
+                                        m += "\n`Author:` {} ### {}".format(author, author.id)
+                                        m += "\n`Target:` {} ### {}".format(user, user.id)
+                                        m += "\n`Role:` {}".format(o.name)
+                                        for o in logs:
+                                            b = o.split(' | ')
+                                            if b[0] == ctx.message.server.id:
+                                                c = client.get_channel(b[1])
+                                                await client.send_message(c, m)
+                                                break
+                                    except:
+                                        embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
+                                        await client.say(embed=embed)
+                                    break
+                        if len(b) == 0:
+                            embed.description = "{} A role with that name was not found.".format(error_e)
                             await client.say(embed=embed)
-                            break
-                        else:
-                            try:
-                                await client.add_roles(user, i)
-                                embed.description = "{} **{}** added `{}` to **{}**'s roles.".format(giverole_e, author.name, i.name, user.name)
-                                await client.say(embed=embed)
-                                m = splitter
-                                m += "\n{} **__Give Role__** {}".format(log_e, giverole_e)
-                                m += "\n`Author:` {} ### {}".format(author, author.id)
-                                m += "\n`Target:` {} ### {}".format(user, user.id)
-                                m += "\n`Role:` {}".format(i.name)
-                                await client.send_message(client.get_channel(log_chnl), m)
-                            except:
-                                embed.description = "{} There was an error while trying to edit that user's roles.".format(error_e)
-                                await client.say(embed=embed)
-                            break
-                if len(a) == 0:
-                    embed.description = "{} A role with that name was not found.".format(error_e)
-                    await client.say(embed=embed)
-        else:
-            embed.description = "{} This command can only be used by owners.".format(error_e)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by administrators, managers and owners.".format(error_e)
             await client.say(embed=embed)
-        
+
+''' COMMANDS FOR MANAGERS '''
 # }idban <user id> <reason>
 @client.command(pass_context=True)
 async def idban(ctx, target = None, *, args = None):
@@ -843,31 +1061,211 @@ async def idban(ctx, target = None, *, args = None):
         await client.say(embed=embed)
     else:
         author = ctx.message.author
-        owner = discord.utils.get(ctx.message.server.roles, id=owners_role)
-        staff = discord.utils.get(ctx.message.server.roles, id=staff_role)
-        if owner in author.roles:
-            if target == None or args == None:
-                embed.description = "{} The command was used incorrectly.\nProper usage: `<user ID> <reason>`.".format(error_e)
-                await client.say(embed=embed)
-            elif len(str(args)) > 250:
-                embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
-                await client.say(embed=embed)
-            else:
-                try:
-                    user = await client.get_user_info(target)
-                    await client.http.ban(target, ctx.message.server.id, 0)
-                    embed.description = "{} **{}** ID banned **{}**.\nReason: {}".format(idban_e, author.name, user, args)
+        roles = [owner_roles, manager_roles]
+        a = []
+        for i in roles:
+            for u in i:
+                if u in ctx.message.server.roles and u in ctx.message.author.roles:
+                    if target == None or args == None:
+                        embed.description = "{} The command was used incorrectly.\nProper usage: `<user ID> <reason>`.".format(error_e)
+                        await client.say(embed=embed)
+                    elif len(str(args)) > 250:
+                        embed.description = "{} The reason cannot be longer than 250 characters.".format(error_e)
+                        await client.say(embed=embed)
+                    else:
+                        try:
+                            user = await client.get_user_info(target)
+                            await client.http.ban(target, ctx.message.server.id, 0)
+                            embed.description = "{} **{}** ID banned **{}**.\nReason: {}".format(idban_e, author.name, user, args)
+                            await client.say(embed=embed)
+                            m = splitter
+                            m += "\n{} **__ID Ban__** {}".format(log_e, idban_e)
+                            m += "\n`Author:` {} ### {}".format(author, author.id)
+                            m += "\n`Target:` {} ### {}".format(user, user.id)
+                            m += "\n`Reason:`".format(args)
+                            for o in logs:
+                                b = o.split(' | ')
+                                if b[0] == ctx.message.server.id:
+                                    c = client.get_channel(b[1])
+                                    await client.send_message(c, m)
+                                    break
+                        except:
+                            embed.description = "{} Either I cannot ban the user with that ID or that user ID does not exist.".format(error_e)
+                            await client.say(embed=embed)
+                    a.append("+1")
+                    break
+            if len(a) != 0:
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by managers and owners.".format(error_e)
+            await client.say(embed=embed)
+
+''' COMMANDS FOR OWNERS '''
+# }setrole <option> <role name>
+@client.command(pass_context=True)
+async def setrole(ctx, option = None, *, args = None):
+    embed = discord.Embed(colour=0x7F1100)
+    embed.set_footer(text=footer_text)
+    if len(started) == 0:
+        embed.description = "{} The bot is restarting. Please try again in a few seconds.".format(reload_e)
+        await client.say(embed=embed)
+    else:
+        author = ctx.message.author
+        a = []
+        for i in owner_roles:
+            if i in ctx.message.server.roles and i in ctx.message.author.roles:
+                options = ["owner", "manager", "admin", "mod", "helper", "muted"]
+                if option == None or args == None:
+                    embed.description = "{} Not all arguments were given.\nOptions: `owner`, `manager`, `admin`, `mod`, `helper`, `muted`.\nTo remove a role from the database write the role's name like this: `<role name> | none`.".format(error_e)
                     await client.say(embed=embed)
-                    m = splitter
-                    m += "\n{} **__ID Ban__** {}".format(log_e, idban_e)
-                    m += "\n`Author:` {} ### {}".format(author, author.id)
-                    m += "\n`Target:` {} ### {}".format(user, user.id)
-                    m += "\n`Reason:`".format(args)
-                    await client.send_message(client.get_channel(log_chnl), m)
-                except:
-                    embed.description = "{} Either I cannot ban the user with that ID or that user ID does not exist.".format(error_e)
+                elif option.lower() not in options:
+                    embed.description = "{} Invalid option.\nOptions: `owner`, `manager`, `admin`, `mod`, `helper`, `muted`.\nTo remove a role from the database write the role's name like this: `<role name> | none`.".format(error_e)
                     await client.say(embed=embed)
-        else:
+                else:
+                    t = {"owner" : owner_roles_chnl,
+                         "manger" : manager_roles_chnl,
+                         "admin" : admin_roles_chnl,
+                         "mod" : mod_roles_chnl,
+                         "helper" : helper_roles_chnl,
+                         "muted" : muted_roles_chnl}
+                    k = {"owner" : owner_roles,
+                         "manger" : manager_roles,
+                         "admin" : admin_roles,
+                         "mod" : mod_roles,
+                         "helper" : helper_roles,
+                         "muted" : muted_roles}
+                    embed.description = "{} Editing roles database... {}".format(roles_e, loading_e)
+                    h = await client.say(embed=embed)
+                    p = []
+                    r = []
+                    for u in ctx.message.server.roles:
+                        if ' | ' in args:
+                            y = args.split(' | ')
+                            args = y[0]
+                            r.append(y[1])
+                        if args.lower() in str(u.name.lower()):
+                            p.append("+1")
+                            if " | none" in r:
+                                async for o in client.logs_from(client.get_channel(t[option]), limit=limit):
+                                    b = o.content.split(' | ')
+                                    if b[0] == ctx.message.server.id and b[1] == u.id:
+                                        await client.delete_message(o)
+                                        k[option].remove(u)
+                                        break
+                                embed.description = "{} **{}** removed `{}` from the `{}` roles database.".format(roles_e, author.name, u.name, option)
+                                await client.edit_message(h, embed=embed)
+                                m = splitter
+                                m += "\n{} **__Set Role__** {}".format(log_e, roles_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Removed role:` {} ### {}".format(u.name, u.id)
+                                m += "\n`Role type:` {}".format(option)
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                                break
+                            elif option.lower() != "member":
+                                async for o in client.logs_from(client.get_channel(t[option]), limit=limit):
+                                    b = o.content.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        k[option].remove(discord.utils.get(ctx.message.server.roles, id=b[1]))
+                                        await client.delete_message(o)
+                                        break
+                                await client.send_message(client.get_channel(t[option]), "{} | {}".format(ctx.message.server.id, u.id))
+                                k[option].append(u)
+                                embed.description = "{} **{}** set the `{}` role as `{}`.".format(roles_e, author.name, u.name, option)
+                                await client.edit_message(h, embed=embed)
+                                m = splitter
+                                m += "\n{} **__Set Role__** {}".format(log_e, roles_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Set role:` {} ### {}".format(u.name, u.id)
+                                m += "\n`Set as:` {}".format(option)
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                                break
+                            else:
+                                await client.send_message(client.get_channel(t[option]), "{} | {}".format(ctx.message.server.id, u.id))
+                                k[option].append(u)
+                                embed.description = "{} **{}** set the `{}` role as `{}`/`auto role`.".format(roles_e, author.name, u.name, option)
+                                await client.edit_message(h, embed=embed)
+                                m = splitter
+                                m += "\n{} **__Set Role__** {}".format(log_e, roles_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`Set role:` {} ### {}".format(u.name, u.id)
+                                m += "\n`Set as:` {}/auto role".format(option)
+                                for o in logs:
+                                    b = o.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        c = client.get_channel(b[1])
+                                        await client.send_message(c, m)
+                                        break
+                                break
+                    if len(p) == 0:
+                        embed.description = "{} Role not found.".format(error_e)
+                        await client.edit_message(h, embed=embed)
+                a.append("+1")
+                break
+        if len(a) == 0:
+            embed.description = "{} This command can only be used by owners.".format(error_e)
+            await client.say(embed=embed)
+            
+# }log <channel name>
+@client.command(pass_context=True)
+async def log(ctx, *, args = None):
+    embed = discord.Embed(colour=0x7F1100)
+    embed.set_footer(text=footer_text)
+    if len(started) == 0:
+        embed.description = "{} The bot is restarting. Please try again in a few seconds.".format(reload_e)
+        await client.say(embed=embed)
+    else:
+        author = ctx.message.author
+        a = []
+        for i in owner_roles:
+            if i in ctx.message.server.roles and i in ctx.message.author.roles:
+                if args == None:
+                    embed.description = "{} No channel name given.".format(error_e)
+                    await client.say(embed=embed)
+                else:
+                    embed.description = "{} Editing log channels database... {}".format(roles_e, loading_e)
+                    h = await client.say(embed=embed)
+                    p = []
+                    for u in ctx.message.server.channels:
+                        if args.lower() in str(u.name.lower()):
+                            p.append("+1")
+                            try:
+                                k = await client.send_message(u, "test log message")
+                                async for i in client.logs_from(client.get_channel(logs_chnl), limit=limit):
+                                    b = i.content.split(' | ')
+                                    if b[0] == ctx.message.server.id:
+                                        logs.remove(i.content)
+                                        await client.delete_message(i)
+                                        break
+                                await client.send_message(client.get_channel(logs_chnl), "{} | {}".format(ctx.message.server.id, u.id))
+                                logs.append("{} | {}".format(ctx.message.server.id, u.id))
+                                embed.description = "{} **{}** set `{}` as the new logs channel.".format(log_e, author.name, u.name)
+                                await client.edit_message(h, embed=embed)
+                                m = splitter
+                                m += "\n{} **__Log Channel__** {}".format(log_e, log_e)
+                                m += "\n`Author:` {} ### {}".format(author, author.id)
+                                m += "\n`New channel:` {} ### {}".format(u.name, u.id)
+                                await client.edit_message(k, m)
+                                break
+                            except:
+                                embed.description = "{} Unable to send logs in that channel ( `{}` ).".format(error_e, u.name)
+                                await client.edit_message(h, embed=embed)
+                                break
+                    if len(p) == 0:
+                        embed.description = "{} Channel not found.".format(error_e)
+                        await client.edit_message(h, embed=embed)
+                a.append("+1")
+                break
+        if len(a) == 0:
             embed.description = "{} This command can only be used by owners.".format(error_e)
             await client.say(embed=embed)
 
