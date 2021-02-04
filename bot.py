@@ -1271,4 +1271,4 @@ async def log(ctx, *, args = None):
 
 
 #######################
-client.run(os.environ['BOT_TOKEN'])
+client.run(os.environ['NzA2OTgyMzEyMTYzNjcyMDk3.XrCKlg.Dqlk3pxNihXZXB1IRLmLyxq93jI'])
